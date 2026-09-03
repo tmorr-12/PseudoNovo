@@ -1,0 +1,17 @@
+[
+    {
+        "tool": "quast",
+        "id_col": "Assembly",
+        "keep_columns": ["Assembly", "N50", "Total length", "# contigs", "# contigs (>= 1000 bp)"]
+    },
+    {
+        "tool": "checkm2",
+        "id_col": "Name",
+        "keep_columns": ["Name", "Completeness", "Contamination", "GC_Content", "Total_Coding_Sequences", "Max_Contig_Length"]
+    },
+    {
+        "tool": "mlst",
+        "id_col": "FILE",
+        "keep_columns": ["FILE", "SCHEME", "ST", "ALLELES"]
+    }
+]

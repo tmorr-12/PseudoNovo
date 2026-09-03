@@ -1,0 +1,14 @@
+- update help menu and readme
+- download databases in no paths provided (still error if invalid path is provided)
+- hostile host read removal functionality has not been tested
+- assert short and long reads belong to same sample for hybrid assembly
+- better hybrid assembly (long read first assembly)
+- in hybrid mode, reads are silently dropped if they fail qc, i.e. no guarantee both short and long reads are passed onto assembly
+- flye fallback if autocycler fails for long reads
+- check corrupted / invalid / decompress files before pipeline begins
+- update bwa to mini bwa
+- include plassembler in long and hybrid workflows to identify small plasmids
+- add software versions
+- if after chopper filtering, should again samples be dropped in post-filtering read depth is insufficient?
+- READS THAT DON'T NATURALLY PASS QC FILTERS HAVE NOT BEEN TESTED
+- NOT TESTED AT SCALE

@@ -1,0 +1,109 @@
+%%metro title: PseudoNovo
+%%metro track_gap: 1
+%%metro mode: light
+%%metro style: nfcore
+%%metro file: short_reads_in | FASTQ
+%%metro file: long_reads_in | FASTQ
+%%metro line: short | Short Reads | #2db572
+%%metro line: long | Long Reads | #f5c542
+%%metro line: hybrid | Hybrid Reads | #ff7142
+%%metro line: spur | Reporting | #0570b0
+%%metro line: help1 | * Process(es) skipped by default | 
+%%metro line: help2 | ** Entry point if --skip_preprocessing flag is supplied |
+%%metro section_y_gap: 0
+
+graph LR
+    subgraph short_pre [Short Read Preprocessing]
+        fastqc([Fastqc])
+        filter_fastqc([Filter Fastqc])
+        fastp([Fastp])
+        filter_fastp([Filter Fastp])
+
+        short_reads_in -->|short| fastqc
+        fastqc -->|short| filter_fastqc
+        filter_fastqc -->|short| fastp
+        fastp -->|short| filter_fastp
+    end
+    subgraph long_pre [Long Read Preprocessing]
+        nanoplot_pre([Nanoplot Pre])
+        porechop_abi([Porechop_ABI*])
+        filter_nanoplot([Filter Nanoplot])
+        chopper([Chopper])
+
+        long_reads_in -->|long| nanoplot_pre
+        nanoplot_pre -->|long| filter_nanoplot
+        filter_nanoplot -->|long| porechop_abi
+        porechop_abi -->|long| chopper
+        filter_nanoplot -->|long| chopper
+    end
+    subgraph decontamination[Decontamination]
+        hostile([Hostile*])
+        sylph_sketch([Sylph Sketch])
+        sylph_profile([Sylph Profile])
+
+        hostile -->|short, long| sylph_sketch
+        sylph_sketch -->|short, long| sylph_profile
+    end
+    subgraph short_ref[Short Read Mapping*]
+        bwa([BWA])
+        samtools([Samtools])
+        filter_samtools([Filter Samtools])
+
+        bwa -->|short| samtools
+        samtools -->|short| filter_samtools
+    end
+    subgraph long_read_report[Long Read Reporting]
+        rasusa([Rasusa*])
+        nanoplot_post([Nanoplot Post])
+        compare_nanoplot([Compare Nanoplot])
+
+        rasusa -->|long| nanoplot_post
+        nanoplot_post -->|long| compare_nanoplot
+    end
+    subgraph preprocessed_out[Checkpoint**]
+    	preprocessed_reads([Preprocessed Reads])
+    end
+    subgraph assembly[Assembly]
+        unicycler_short([Unicycler Short])
+        unicycler_hybrid([Unicycler Hybrid])
+        autocycler([Autocycler])
+        quast([Quast])
+        checkm2([Checkm2])
+        mlst([Mlst])
+        collect_reports([Collect Reports])
+
+        unicycler_short -->|short| quast
+        unicycler_short -->|short| checkm2
+        unicycler_short -->|short| mlst
+        autocycler -->|long| quast
+        autocycler -->|long| checkm2
+        autocycler -->|long| mlst
+        unicycler_hybrid -->|hybrid| quast
+        unicycler_hybrid -->|hybrid| checkm2
+        unicycler_hybrid -->|hybrid| mlst
+        quast -->|short, long, hybrid| collect_reports
+        checkm2 -->|short, long, hybrid| collect_reports
+        mlst -->|short, long, hybrid| collect_reports
+    end
+    subgraph annotation[Annotation]
+    	bakta([Bakta])
+        abricate([Abricate])
+    end
+    subgraph reporting[Reporting]
+    	merge_reports([Merge Reports])
+    end
+    %% Inter-section edges
+    filter_fastp -->|short| hostile
+    chopper -->|long| hostile
+    sylph_profile -->|long| rasusa
+    sylph_profile -->|short| bwa
+    
+    filter_samtools -->|short|preprocessed_reads
+    compare_nanoplot -->|long|preprocessed_reads
+    preprocessed_reads -->|short|unicycler_short
+    preprocessed_reads -->|long|autocycler
+    preprocessed_reads -->|hybrid|unicycler_hybrid
+
+	collect_reports -->|short,long,hybrid| bakta
+    collect_reports -->|short,long,hybrid| abricate
+    collect_reports -->|spur| merge_reports
