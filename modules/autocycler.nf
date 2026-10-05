@@ -3,7 +3,7 @@ process AUTOCYCLER {
     tag "${ID}"
     label "huge"
 
-    publishDir "${params.outdir}/${ID}"
+    publishDir "${params.outdir}/assemblies"
 
     container "ghcr.io/tmorr-12/autocycler:0.7.0_v4"
 

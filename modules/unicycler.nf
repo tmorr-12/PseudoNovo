@@ -5,7 +5,7 @@ process UNICYCLER_SHORT {
 
     container 'quay.io/biocontainers/unicycler:0.5.1--py312hdcc493e_5'
 
-    publishDir "${params.outdir}/${ID}"
+    publishDir "${params.outdir}/assemblies"
 
     input:
     tuple val(ID), path(reads), val(size)
@@ -38,7 +38,7 @@ process UNICYCLER_HYBRID {
 
     container 'quay.io/biocontainers/unicycler:0.5.1--py312hdcc493e_5'
 
-    publishDir "${params.outdir}/${ID}"
+    publishDir "${params.outdir}/assemblies"
 
     input:
     tuple val(ID), path(reads), val(size)

@@ -1,5 +1,6 @@
 #!/usr/bin/env nextflow
 
+include { GUNZIP } from '../modules/decompress.nf'
 include { SHORT_READ_PREPROCESSING } from '../subworkflows/short_read_preprocessing.nf'
 include { LONG_READ_PREPROCESSING } from '../subworkflows/long_read_preprocessing.nf'
 
@@ -9,17 +10,20 @@ workflow PREPROCESSING {
     input_ch
 
     main:
+    GUNZIP(input_ch)
+        .set { decompressed_ch }
+
     if (params.mode == 'short') {
-        SHORT_READ_PREPROCESSING(input_ch)
+        SHORT_READ_PREPROCESSING(decompressed_ch)
             .set { preprocessed_ch }
 
     } else if (params.mode == 'long') {
-        LONG_READ_PREPROCESSING(input_ch)
+        LONG_READ_PREPROCESSING(decompressed_ch)
             .set { preprocessed_ch }
 
     } else if (params.mode == 'hybrid') {
-        short_reads_ch = input_ch.map { ID, reads, size -> tuple(ID, [reads[0], reads[1]], size) }
-        long_reads_ch = input_ch.map { ID, reads, size -> tuple(ID, [reads[2]], size) }
+        short_reads_ch = decompressed_ch.map { ID, reads, size -> tuple(ID, [reads[0], reads[1]], size) }
+        long_reads_ch = decompressed_ch.map { ID, reads, size -> tuple(ID, [reads[2]], size) }
 
         SHORT_READ_PREPROCESSING(short_reads_ch)
         LONG_READ_PREPROCESSING(long_reads_ch)

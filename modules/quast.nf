@@ -12,7 +12,7 @@ process QUAST {
     tuple val(ID), path("${ID}_quast_report.tsv"), emit: quast_out
 
     script:
-    quast_report = "${ID}_quast_report.tsv"
+    def quast_report = "${ID}_quast_report.tsv"
     """
     quast.py ${fasta} -o quast --no-html --no-plots
     mv quast/transposed_report.tsv ${quast_report}

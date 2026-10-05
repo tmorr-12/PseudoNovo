@@ -48,7 +48,7 @@ process FILTER_SAMTOOLS {
     tag "${ID}"
     label 'small'
 
-    publishDir "${params.outdir}/failed_samples", pattern: "${ID}.fail"
+    publishDir "${params.outdir}/failed_samples", pattern: "*.fail"
 
     input:
     tuple val(ID), path(reads), val(size), path(sn_stats)

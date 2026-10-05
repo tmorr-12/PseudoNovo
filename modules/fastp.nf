@@ -5,8 +5,8 @@ process FASTP {
 
     container "quay.io/biocontainers/fastp:1.3.3--h43da1c4_0"
 
-    publishDir "${params.outdir}/fastp", pattern: "${ID}.html"
-    publishDir "${params.outdir}/fastp/failed_reads", pattern: "${ID}_failed.fastq"
+    publishDir "${params.outdir}/fastp", pattern: "*.html"
+    publishDir "${params.outdir}/fastp/failed_reads", pattern: "*_failed.fastq"
 
     input:
     tuple val(ID), path(reads), val(size)
@@ -39,6 +39,7 @@ process FILTER_FASTP {
     // Minimum sequence depth = 30x
     // Lower assembly length limit = 5.5Mbp
     // Total base count = 165Mbp
+    tag "${ID}"
     label 'small'
 
     input:

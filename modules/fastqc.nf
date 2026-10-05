@@ -2,7 +2,7 @@ process FASTQC {
     tag "${ID}"
     label 'small'
 
-    container "quay.io/biocontainers/fastqc:0.12.1--hdfd78af_0"
+    container "quay.io/biocontainers/fastqc:0.13.0--hdfd78af_0"
 
     publishDir "${params.outdir}/fastqc", pattern: "*.html"
 

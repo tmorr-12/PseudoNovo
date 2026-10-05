@@ -3,7 +3,7 @@ process SYLPH_SKETCH {
     tag "${ID}"
     label 'medium'
 
-    container "quay.io/biocontainers/sylph:0.9.0--ha6fb395_0"
+    container "quay.io/biocontainers/sylph:1.0.0--hb42e459_0"
 
     input:
     tuple val(ID), path(reads), val(genome_size)
@@ -36,9 +36,9 @@ process SYLPH_PROFILE {
     tag "${ID}"
     label 'medium'
 
-    container "quay.io/biocontainers/sylph:0.9.0--ha6fb395_0"
+    container "quay.io/biocontainers/sylph:1.0.0--hb42e459_0"
 
-    publishDir "${params.outdir}/${ID}", pattern: '*.tsv'
+    publishDir "${params.outdir}/sylph", pattern: '*.tsv'
 
     input:
     tuple val(ID), path(reads), val(genome_size), path(sylph_sketch), val(MODE)

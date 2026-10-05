@@ -5,7 +5,7 @@ process BAKTA {
 
     container "quay.io/biocontainers/bakta:1.12.0--pyhdfd78af_0"
 
-    publishDir "${params.outdir}/${ID}"
+    publishDir "${params.outdir}/annotations"
 
     input:
     tuple val(ID), path(contigs)

@@ -8,57 +8,44 @@
 %%metro line: long | Long Reads | #f5c542
 %%metro line: hybrid | Hybrid Reads | #ff7142
 %%metro line: spur | Reporting | #0570b0
-%%metro line: help1 | * Process(es) skipped by default | 
-%%metro line: help2 | ** Entry point if --skip_preprocessing flag is supplied |
-%%metro section_y_gap: 0
+%%metro line: help1 | * Process(es) skipped by default | #ffffff
+%%metro line: help2 | ** Entry point if --skip_preprocessing flag is supplied | #ffffff
+%%metro section_y_gap: 30
 
 graph LR
     subgraph short_pre [Short Read Preprocessing]
         fastqc([Fastqc])
-        filter_fastqc([Filter Fastqc])
         fastp([Fastp])
-        filter_fastp([Filter Fastp])
 
         short_reads_in -->|short| fastqc
-        fastqc -->|short| filter_fastqc
-        filter_fastqc -->|short| fastp
-        fastp -->|short| filter_fastp
+        fastqc -->|short| fastp
     end
     subgraph long_pre [Long Read Preprocessing]
         nanoplot_pre([Nanoplot Pre])
         porechop_abi([Porechop_ABI*])
-        filter_nanoplot([Filter Nanoplot])
         chopper([Chopper])
 
         long_reads_in -->|long| nanoplot_pre
-        nanoplot_pre -->|long| filter_nanoplot
-        filter_nanoplot -->|long| porechop_abi
+        nanoplot_pre -->|long| porechop_abi
         porechop_abi -->|long| chopper
-        filter_nanoplot -->|long| chopper
     end
     subgraph decontamination[Decontamination]
         hostile([Hostile*])
-        sylph_sketch([Sylph Sketch])
-        sylph_profile([Sylph Profile])
+        sylph([Sylph])
 
-        hostile -->|short, long| sylph_sketch
-        sylph_sketch -->|short, long| sylph_profile
+        hostile -->|short, long| sylph
     end
     subgraph short_ref[Short Read Mapping*]
         bwa([BWA])
         samtools([Samtools])
-        filter_samtools([Filter Samtools])
 
         bwa -->|short| samtools
-        samtools -->|short| filter_samtools
     end
     subgraph long_read_report[Long Read Reporting]
         rasusa([Rasusa*])
         nanoplot_post([Nanoplot Post])
-        compare_nanoplot([Compare Nanoplot])
 
         rasusa -->|long| nanoplot_post
-        nanoplot_post -->|long| compare_nanoplot
     end
     subgraph preprocessed_out[Checkpoint**]
     	preprocessed_reads([Preprocessed Reads])
@@ -93,13 +80,13 @@ graph LR
     	merge_reports([Merge Reports])
     end
     %% Inter-section edges
-    filter_fastp -->|short| hostile
+    fastp -->|short| hostile
     chopper -->|long| hostile
-    sylph_profile -->|long| rasusa
-    sylph_profile -->|short| bwa
+    sylph -->|long| rasusa
+    sylph -->|short| bwa
     
-    filter_samtools -->|short|preprocessed_reads
-    compare_nanoplot -->|long|preprocessed_reads
+    samtools -->|short|preprocessed_reads
+    nanoplot_post -->|long|preprocessed_reads
     preprocessed_reads -->|short|unicycler_short
     preprocessed_reads -->|long|autocycler
     preprocessed_reads -->|hybrid|unicycler_hybrid

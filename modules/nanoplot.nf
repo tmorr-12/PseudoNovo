@@ -5,8 +5,6 @@ process NANOPLOT {
 
     container "quay.io/biocontainers/nanoplot:1.47.1--pyhdfd78af_0"
 
-    publishDir "${params.outdir}/nanoplot", pattern: "${ID}_${stage}NanoPlot-report.html"
-
     input:
     tuple val(ID), path(reads), val(size)
     val(stage)
@@ -43,7 +41,7 @@ process COMPARE_NANOPLOT {
     tag "${ID}"
     label 'small'
 
-    publishDir "${params.outdir}/${ID}"
+    publishDir "${params.outdir}/nanoplot"
 
     input:
     tuple val(ID), path(pre_report), path(post_report)
