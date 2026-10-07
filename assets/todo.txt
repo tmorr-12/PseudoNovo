@@ -1,5 +1,4 @@
 - update help menu and readme
-- download databases in no paths provided (still error if invalid path is provided)
 - hostile host read removal functionality has not been tested
 - Polish long read assemblies
 - assert short and long reads belong to same sample for hybrid assembly
