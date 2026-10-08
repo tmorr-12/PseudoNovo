@@ -1,7 +1,7 @@
 process BAKTA {
     // https://github.com/oschwengers/bakta
     tag "${ID}"
-    label 'huge'
+    label 'large'
 
     container "quay.io/biocontainers/bakta:1.12.1--pyhdfd78af_0"
 

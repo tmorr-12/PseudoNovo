@@ -1,7 +1,7 @@
 process QUAST {
     // https://github.com/ablab/quast
     tag "${ID}"
-    label 'small'
+    label 'mouse'
 
     container 'quay.io/biocontainers/quast:5.3.0--py39pl5321heaaa4ec_0'
 

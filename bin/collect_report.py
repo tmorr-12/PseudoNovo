@@ -62,8 +62,8 @@ def qc_row(row, args):
 
     # === checkm2 GC content ===
 
-    min_gc = args.gc * 0.9
-    max_gc = args.gc * 1.1
+    min_gc = args.gc * 0.98
+    max_gc = args.gc * 1.02
     if not (min_gc <= row["GC_Content"] <= max_gc):
         failed.append("GC_Content")
 

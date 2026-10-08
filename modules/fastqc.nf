@@ -23,7 +23,7 @@ process FASTQC {
 
 process FILTER_FASTQC {
     tag "${ID}"
-    label 'small'
+    label 'mouse'
 
     input:
     tuple val(ID), path(reads), val(size), path(fastqc_zip)

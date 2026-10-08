@@ -1,7 +1,7 @@
 process ABRICATE {
     // https://github.com/tseemann/abricate
     tag "${ID}"
-    label 'medium'
+    label 'mouse'
 
     container "quay.io/biocontainers/abricate:1.4.0--h05cac1d_0"
 

@@ -2,7 +2,7 @@
     {
         "tool": "quast",
         "id_col": "Assembly",
-        "keep_columns": ["Assembly", "N50", "Total length", "# contigs", "# contigs (>= 1000 bp)"]
+        "keep_columns": ["Assembly", "N50", "Total length", "# contigs", "# contigs (>= 1000 bp)", "L50", "L90"]
     },
     {
         "tool": "checkm2",
