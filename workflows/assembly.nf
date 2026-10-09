@@ -3,6 +3,10 @@
 include { UNICYCLER_SHORT
           UNICYCLER_HYBRID } from '../modules/unicycler.nf'
 include { AUTOCYCLER } from '../modules/autocycler.nf'
+include { MEDAKA } from '../modules/medaka.nf'
+include { BWA_POLYPOLISH
+          POLYPOLISH } from '../modules/polypolish.nf'
+include { PYPOLCA } from '../modules/pypolca.nf'
 include { QUAST } from '../modules/quast.nf'
 include { CHECKM2 } from '../modules/checkm2.nf'
 include { MLST } from '../modules/mlst.nf'
@@ -18,14 +22,16 @@ workflow ASSEMBLY {
     if (params.mode == "short") {
         UNICYCLER_SHORT(assembly_ch)
         qc_ch = UNICYCLER_SHORT.out.fasta_ch
-
     } else if (params.mode == "long") {
         AUTOCYCLER(assembly_ch)
-        qc_ch = AUTOCYCLER.out.fasta_ch
-        
+        | MEDAKA
+        qc_ch = MEDAKA.out.polished_ch
     } else if (params.mode == "hybrid") {
-        UNICYCLER_HYBRID(assembly_ch)
-        qc_ch = UNICYCLER_HYBRID.out.fasta_ch
+        AUTOCYCLER(assembly_ch)
+        | BWA_POLYPOLISH
+        | POLYPOLISH
+        | PYPOLCA
+        qc_ch = PYPOLCA.out.hybrid_ch
     }
     
     qc_ch
