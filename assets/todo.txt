@@ -1,8 +1,7 @@
 - update help menu and readme
 - hostile host read removal functionality has not been tested
-- Polish long read assemblies
 - assert short and long reads belong to same sample for hybrid assembly
-- better hybrid assembly (long read first assembly)
+- test long and hybrid workflows (at scale)
 - in hybrid mode, reads are silently dropped if they fail qc, i.e. no guarantee both short and long reads are passed onto assembly
 - flye fallback if autocycler fails for long reads
 - check corrupted / invalid / decompress files before pipeline begins

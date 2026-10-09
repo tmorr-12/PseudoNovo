@@ -16,6 +16,5 @@ process ABRICATE {
     script:
     """
     abricate --db plasmidfinder ${contigs} > ${ID}_plasmidfinder.tsv
-    abricate --db vfdb ${contigs} > ${ID}_vfdb.tsv
     """
 }
