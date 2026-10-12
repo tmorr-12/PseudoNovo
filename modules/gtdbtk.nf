@@ -11,21 +11,18 @@ process GTDBTK {
     tuple val(ID), path(contigs, stageAs: "fastas/*")
 
     output:
-    path("${ID}_gtdbtk.tsv"), emit: gtdbtk_out
+    tuple val(ID), path("${ID}_gtdbtk.tsv"), emit: gtdbtk_out
 
     script:
-    def report_tsv = "${ID}_gtdbtk.tsv"
     """
-    export GTDBTK_DATA_PATH="${params.gtdb}"
     mkdir -p gtdbtk_outdir
 
     gtdbtk classify_wf \\
         --genome_dir fastas \\
-        --skip_ani_screen \\
         --cpus ${task.cpus} \\
         -x fa \\
         --out_dir gtdbtk_outdir
 
-    mv gtdbtk_outdir/gtdbtk.bac*.summary.tsv ${report_tsv}
+    mv gtdbtk_outdir/classify/gtdbtk.bac*.summary.tsv ${ID}_gtdbtk.tsv
     """
 }

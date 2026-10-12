@@ -22,7 +22,8 @@ process COLLECT_REPORTS {
         --target_size ${params.target_genome_size} \
         --completeness ${params.completeness} \
         --contamination ${params.contamination} \
-        --gc ${params.target_gc_content}
+        --gc ${params.target_gc_content} \
+        --gtdb_classification "${params.gtdb_classification}"
     """
 }
 

@@ -5,7 +5,7 @@ process GENOMAD {
 
     container "quay.io/biocontainers/genomad:1.12.0--pyhdfd78af_0"
 
-    publishDir "${params.outdir}/genomad", pattern: "*_virus_*.tsv"
+    publishDir "${params.outdir}/annotations", pattern: "*_virus_*.tsv"
 
     input:
     tuple val(ID), path(contigs)
@@ -13,7 +13,6 @@ process GENOMAD {
 
     output:
     tuple val(ID), path("${ID}_virus.fna"), emit: genomad_fna_ch
-    path("${ID}_virus_summary.tsv"), emit: genomad_summary
     path("${ID}_virus_genes.tsv"), emit: genomad_genes
 
     script:
@@ -26,8 +25,8 @@ process GENOMAD {
         genomad_out \\
         ${genomad_db}
 
-    mv genomad_out/${ID}_summary/${ID}_virus.fna ${ID}_virus.fna
-    mv genomad_out/${ID}_summary/${ID}_virus_summary.tsv ${ID}_virus_summary.tsv
-    mv genomad_out/${ID}_summary/${ID}_virus_genes.tsv ${ID}_virus_genes.tsv
+    mv genomad_out/${ID}_contigs_summary/${ID}_contigs_virus.fna ${ID}_virus.fna
+    mv genomad_out/${ID}_contigs_summary/${ID}_contigs_virus_summary.tsv ${ID}_virus_summary.tsv
+    mv genomad_out/${ID}_contigs_summary/${ID}_contigs_virus_genes.tsv ${ID}_virus_genes.tsv
     """
 }

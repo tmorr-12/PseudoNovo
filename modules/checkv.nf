@@ -5,7 +5,7 @@ process CHECKV {
 
     container "quay.io/biocontainers/checkv:1.1.1--pyh106432d_1"
 
-    publishDir "${params.outdir}/annotations", pattern: "*_checkv.tsv"
+    publishDir "${params.outdir}/annotations", pattern: "*_checkv_summary.tsv"
 
     input:
     tuple val(ID), path(genomad_fna)
@@ -20,6 +20,6 @@ process CHECKV {
     export CHECKVDB=${params.checkv_db}
     checkv end_to_end ${genomad_fna} checkv_out -t ${task.cpus}
 
-    mv checkv_out/quality_summary.tsv ${ID}_checkv.tsv
+    mv checkv_out/quality_summary.tsv ${ID}_checkv_summary.tsv
     """
 }
