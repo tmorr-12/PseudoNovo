@@ -1,6 +1,6 @@
 process COLLECT_REPORTS {
     tag "${ID}"
-    label 'mouse'
+    label 'minimal'
 
     container 'quay.io/biocontainers/pandas:2.2.1'
 
@@ -27,7 +27,7 @@ process COLLECT_REPORTS {
 }
 
 process MERGE_REPORTS{
-    label 'mouse'
+    label 'minimal'
 
     container 'quay.io/biocontainers/pandas:2.2.1'
 

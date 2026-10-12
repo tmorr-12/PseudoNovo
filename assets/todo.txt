@@ -1,5 +1,5 @@
 - update help menu and readme
-- hostile host read removal functionality has not been tested
+- add qc param for gtdbtk output (dont know correct format yet to set param)
 - assert short and long reads belong to same sample for hybrid assembly
 - test long and hybrid workflows (at scale)
 - in hybrid mode, reads are silently dropped if they fail qc, i.e. no guarantee both short and long reads are passed onto assembly

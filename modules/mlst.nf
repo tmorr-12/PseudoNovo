@@ -1,7 +1,7 @@
 process MLST {
     // https://github.com/tseemann/mlst
     tag "${ID}"
-    label 'mouse'
+    label 'minimal'
 
     container "quay.io/biocontainers/mlst:2.35.0--hdfd78af_0"
 

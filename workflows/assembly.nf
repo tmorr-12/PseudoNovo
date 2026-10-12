@@ -1,7 +1,6 @@
 #!/usr/bin/env nextflow
 
-include { UNICYCLER_SHORT
-          UNICYCLER_HYBRID } from '../modules/unicycler.nf'
+include { UNICYCLER_SHORT } from '../modules/unicycler.nf'
 include { AUTOCYCLER } from '../modules/autocycler.nf'
 include { MEDAKA } from '../modules/medaka.nf'
 include { BWA_POLYPOLISH
@@ -10,6 +9,7 @@ include { PYPOLCA } from '../modules/pypolca.nf'
 include { QUAST } from '../modules/quast.nf'
 include { CHECKM2 } from '../modules/checkm2.nf'
 include { MLST } from '../modules/mlst.nf'
+include { GTDBTK } from '../modules/gtdbtk.nf'
 include { COLLECT_REPORTS 
           MERGE_REPORTS } from '../modules/reporting.nf'
 
@@ -39,6 +39,7 @@ workflow ASSEMBLY {
             quast: it
             checkm2: it
             mlst: it
+            gtdbtk: it
         }
         .set { split_ch }
 
@@ -49,10 +50,13 @@ workflow ASSEMBLY {
 
     MLST(split_ch.mlst)
 
+    GTDBTK(split_ch.gtdbtk)
+
     report_ch = qc_ch
         .join(QUAST.out.quast_out)
         .join(CHECKM2.out.checkm2_out)
         .join(MLST.out.mlst_out)
+        .join(GTDBTK.out.gtdbtk_out)
         .map { it ->
             tuple(it[0], it[1], it[2..-1])
         }

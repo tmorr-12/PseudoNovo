@@ -13,5 +13,10 @@
         "tool": "mlst",
         "id_col": "FILE",
         "keep_columns": ["FILE", "SCHEME", "ST", "ALLELES"]
+    },
+    {
+        "tool": "gtdbtk",
+        "id_col": "user_genome",
+        "keep_columns": ["classification", "closest_genome_reference"]
     }
 ]

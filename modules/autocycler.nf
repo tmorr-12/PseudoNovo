@@ -11,7 +11,7 @@ process AUTOCYCLER {
     tuple val(ID), path(reads), val(size)
 
     output:
-    tuple val(ID), path(reads), path("${ID}_consensus.fasta"), emit: fasta_ch
+    tuple val(ID), path(reads), path("${ID}_consensus.fa"), emit: fasta_ch
     tuple val(ID), path("${ID}_consensus.yaml"), emit: yaml_ch
 
     script:
@@ -25,7 +25,7 @@ process AUTOCYCLER {
         ${params.autocycler_subsets} \
         ${task.cpus}
 
-    mv autocycler_out/consensus_assembly.fasta ${ID}_consensus.fasta
+    mv autocycler_out/consensus_assembly.fasta ${ID}_consensus.fa
     mv autocycler_out/consensus_assembly.yaml ${ID}_consensus.yaml
     """
 }

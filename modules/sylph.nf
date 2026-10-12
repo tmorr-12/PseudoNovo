@@ -1,7 +1,7 @@
 process SYLPH_SKETCH {
     // https://github.com/bluenote-1577/sylph
     tag "${ID}"
-    label 'mouse'
+    label 'minimal'
 
     container "quay.io/biocontainers/sylph:1.0.0--hb42e459_0"
 

@@ -22,7 +22,7 @@ process NANOPLOT {
 
 process FILTER_NANOPLOT {
     tag "${ID}"
-    label 'small'
+    label 'minimal'
 
     input:
     tuple val(ID), path(reads), val(size), path(nanostats_txt)
@@ -39,7 +39,7 @@ process FILTER_NANOPLOT {
 
 process COMPARE_NANOPLOT {
     tag "${ID}"
-    label 'small'
+    label 'minimal'
 
     publishDir "${params.outdir}/nanoplot"
 

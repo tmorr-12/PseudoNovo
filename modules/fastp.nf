@@ -40,7 +40,7 @@ process FILTER_FASTP {
     // Lower assembly length limit = 5.5Mbp
     // Total base count = 165Mbp
     tag "${ID}"
-    label 'mouse'
+    label 'minimal'
 
     input:
     tuple val(ID), path(reads), val(size), path(fastp_json)

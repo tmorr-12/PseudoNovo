@@ -1,9 +1,11 @@
 process QUAST {
     // https://github.com/ablab/quast
     tag "${ID}"
-    label 'mouse'
+    label 'minimal'
 
     container 'quay.io/biocontainers/quast:5.3.0--py39pl5321heaaa4ec_0'
+
+    publishDir "${params.outdir}/quast", pattern: "*_quast_report.tsv"
 
     input:
     tuple val(ID), path(fasta)

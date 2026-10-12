@@ -12,7 +12,7 @@ process RGI {
     path card_db
 
     output:
-    path("${ID}*"), emit: rgi_out
+    path("${ID}.txt"), emit: rgi_out
 
     script:
     """
