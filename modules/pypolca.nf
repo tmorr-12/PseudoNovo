@@ -3,7 +3,7 @@ process PYPOLCA {
     tag "${ID}"
     label 'medium'
 
-    publishDir "${params.outdir}/assemblies", pattern: "*.fasta"
+    publishDir "${params.outdir}/autocycler_hybrid", pattern: "*.fasta"
 
     container "quay.io/biocontainers/pypolca:0.5.0--pyhdfd78af_0"
 

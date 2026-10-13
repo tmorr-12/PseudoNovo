@@ -45,8 +45,7 @@ process SYLPH_PROFILE {
     path(sylph_db)
 
     output:
-    tuple val(ID), path(reads), val(genome_size), stdout, emit: sylph_out
-    path("${ID}_${MODE}_profile.tsv"), emit: sylph_tsv
+    tuple val(ID), path(reads), val(genome_size), path("${ID}_${MODE}_profile.tsv"), val(MODE), stdout, emit: sylph_out
 
     script:
     """

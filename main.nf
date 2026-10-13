@@ -9,6 +9,8 @@ include { PREPROCESSING } from './workflows/preprocessing.nf'
 include { ASSEMBLY } from './workflows/assembly.nf'
 include { ANNOTATION } from './workflows/annotation.nf'
 
+include { MULTIQC } from './modules/multiqc.nf'
+
 workflow {
 
     if (params.help) {

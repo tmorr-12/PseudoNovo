@@ -1,8 +1,13 @@
 [
     {
+        "tool": "gtdbtk",
+        "id_col": "user_genome",
+        "keep_columns": ["classification"]
+    },
+    {
         "tool": "quast",
         "id_col": "Assembly",
-        "keep_columns": ["Assembly", "N50", "Total length", "# contigs", "# contigs (>= 1000 bp)", "L50", "L90"]
+        "keep_columns": ["Assembly", "N50", "Total length", "# contigs", "# contigs (>= 1000 bp)"]
     },
     {
         "tool": "checkm2",
@@ -13,10 +18,5 @@
         "tool": "mlst",
         "id_col": "FILE",
         "keep_columns": ["FILE", "SCHEME", "ST", "ALLELES"]
-    },
-    {
-        "tool": "gtdbtk",
-        "id_col": "user_genome",
-        "keep_columns": ["classification", "closest_genome_reference"]
     }
 ]

@@ -4,8 +4,6 @@ process FASTQC {
 
     container "quay.io/biocontainers/fastqc:0.13.0--hdfd78af_0"
 
-    publishDir "${params.outdir}/fastqc", pattern: "*.html"
-
     input:
     tuple val(ID), path(reads), val(size)
 
@@ -25,11 +23,14 @@ process FILTER_FASTQC {
     tag "${ID}"
     label 'minimal'
 
+    publishDir "${params.outdir}/fastqc", pattern: "*/summary.txt"
+
     input:
     tuple val(ID), path(reads), val(size), path(fastqc_zip)
 
     output:
     tuple val(ID), path(reads), val(size), stdout, emit: fastqc_out
+    path "*/summary.txt", emit: summaries
 
     script:
     def read_1="${fastqc_zip[0]}"

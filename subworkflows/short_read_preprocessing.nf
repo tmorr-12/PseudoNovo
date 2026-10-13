@@ -16,6 +16,8 @@ workflow SHORT_READ_PREPROCESSING {
     FASTQC(input_ch)
     
     FILTER_FASTQC(FASTQC.out.zip)
+
+    FILTER_FASTQC.out.fastqc_out
     | filter { it -> it[3].trim() == 'PASS' }
     | map { it -> it[0..2] }
     | set { fastqc_out_ch }

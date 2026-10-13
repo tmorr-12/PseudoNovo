@@ -12,6 +12,8 @@ include { MLST } from '../modules/mlst.nf'
 include { GTDBTK } from '../modules/gtdbtk.nf'
 include { COLLECT_REPORTS 
           MERGE_REPORTS } from '../modules/reporting.nf'
+include { PUBLISH_ASSEMBLY } from '../modules/publish_assembly.nf'
+include { MULTIQC } from '../modules/multiqc.nf'
 
 workflow ASSEMBLY {
 
@@ -65,11 +67,14 @@ workflow ASSEMBLY {
 
     merge_ch = COLLECT_REPORTS.out.report.collect()
     MERGE_REPORTS(merge_ch)
+    | MULTIQC
 
     COLLECT_REPORTS.out.contigs
         | filter { it -> it[2].trim() == 'PASS' }
         | map { it -> it[0..1] }
         | set { contigs_ch }
+
+    PUBLISH_ASSEMBLY(contigs_ch)
 
     emit:
     contigs_ch

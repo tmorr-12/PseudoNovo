@@ -12,7 +12,7 @@ workflow ANNOTATION {
     contigs_ch
 
     main:
-    // bakta_db_ch = Channel.value(file(params.bakta_db, checkIfExists: true))
+    bakta_db_ch = Channel.value(file(params.bakta_db, checkIfExists: true))
     card_db_ch = Channel.fromPath("${params.card_db}/*", checkIfExists: true).collect()
     genomad_db_ch = Channel.value(file(params.genomad_db, checkIfExists: true))
 
@@ -27,7 +27,7 @@ workflow ANNOTATION {
         }
         .set { split_ch }
 
-    // BAKTA(split_ch.bakta, bakta_db_ch)
+    BAKTA(split_ch.bakta, bakta_db_ch)
     ABRICATE(split_ch.abricate)
     RGI(split_ch.rgi, card_db_ch)
     GENOMAD(split_ch.genomad, genomad_db_ch)

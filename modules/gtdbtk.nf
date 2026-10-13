@@ -1,7 +1,7 @@
 process GTDBTK {
     // https://github.com/ecogenomics/gtdbtk
     tag "${ID}"
-    label "mega"
+    label "gtdb"
 
     container "quay.io/biocontainers/gtdbtk:2.7.2--pyhdfd78af_1"
 

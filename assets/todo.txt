@@ -1,5 +1,4 @@
-- update help menu and readme
-- add qc param for gtdbtk output (dont know correct format yet to set param)
+- update help menu and readme -> detail generating input manifest and pipeline results outputs
 - assert short and long reads belong to same sample for hybrid assembly
 - test long and hybrid workflows (at scale)
 - in hybrid mode, reads are silently dropped if they fail qc, i.e. no guarantee both short and long reads are passed onto assembly
@@ -12,3 +11,6 @@
 - better logging for failed samples
 - READS THAT DON'T NATURALLY PASS QC FILTERS HAVE NOT BEEN TESTED
 - NOT TESTED AT SCALE
+
+- read preprocessing summary detailing sample and pass/fail for each tool
+- phastest instead of checkv??
