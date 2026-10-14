@@ -10,10 +10,9 @@ include { QUAST } from '../modules/quast.nf'
 include { CHECKM2 } from '../modules/checkm2.nf'
 include { MLST } from '../modules/mlst.nf'
 include { GTDBTK } from '../modules/gtdbtk.nf'
-include { COLLECT_REPORTS 
+include { COLLECT_ASSEMBLY_REPORTS 
           MERGE_REPORTS } from '../modules/reporting.nf'
 include { PUBLISH_ASSEMBLY } from '../modules/publish_assembly.nf'
-include { MULTIQC } from '../modules/multiqc.nf'
 
 workflow ASSEMBLY {
 
@@ -63,13 +62,12 @@ workflow ASSEMBLY {
             tuple(it[0], it[1], it[2..-1])
         }
 
-    COLLECT_REPORTS(report_ch)
+    COLLECT_ASSEMBLY_REPORTS(report_ch)
 
-    merge_ch = COLLECT_REPORTS.out.report.collect()
-    MERGE_REPORTS(merge_ch)
-    | MULTIQC
+    merge_ch = COLLECT_ASSEMBLY_REPORTS.out.report.collect()
+    MERGE_REPORTS(merge_ch, "assembly-report")
 
-    COLLECT_REPORTS.out.contigs
+    COLLECT_ASSEMBLY_REPORTS.out.contigs
         | filter { it -> it[2].trim() == 'PASS' }
         | map { it -> it[0..1] }
         | set { contigs_ch }

@@ -5,7 +5,6 @@ include { KRAKEN2
 include { HOSTILE } from '../modules/hostile.nf'
 include { SYLPH_SKETCH 
           SYLPH_PROFILE } from '../modules/sylph.nf'
-include { SYLPH_TAX } from '../modules/sylph-tax.nf'
 
 workflow DECONTAMINATION {
 
@@ -38,16 +37,12 @@ workflow DECONTAMINATION {
     sylph_db_ch = Channel.value(file(params.sylph_db, checkIfExists: true))
 
     SYLPH_PROFILE(sylph_profile_ch, sylph_db_ch)
-
-    SYLPH_PROFILE.out.sylph_out
-    | filter { it -> it[5].trim() == 'PASS' }
-    | map { it -> it[0..4] }
-    | set { sylph_out_ch }
-
-    sylph_taxonomy = channel.value(file(params.sylph_taxonomy, checkIfExists: true))
-    SYLPH_TAX(sylph_out_ch, sylph_taxonomy)
+    
+    SYLPH_PROFILE.out.reads_out.set { reads_out_ch }
+    SYLPH_PROFILE.out.sylph_tsv.set { sylph_tsv }
 
     emit:
-    SYLPH_TAX.out.assembly_input_ch
+    reads_out_ch
+    sylph_tsv
 
 }

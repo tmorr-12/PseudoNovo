@@ -6,8 +6,8 @@ import pandas as pd
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--reports", nargs="+")
+    parser.add_argument("--name", type=str)
     args = parser.parse_args()
-
 
     dfs = []
     for report in args.reports:
@@ -15,4 +15,4 @@ if __name__ == "__main__":
         dfs.append(df)
 
     merged = pd.concat(dfs, ignore_index=True)
-    merged.to_csv("assembly_report.tsv", sep="\t", index=False)
+    merged.to_csv(f"{args.name}.tsv", sep="\t", index=False)

@@ -45,13 +45,11 @@ process SYLPH_PROFILE {
     path(sylph_db)
 
     output:
-    tuple val(ID), path(reads), val(genome_size), path("${ID}_${MODE}_profile.tsv"), val(MODE), stdout, emit: sylph_out
+    tuple val(ID), path(reads), val(genome_size), emit: reads_out
+    tuple val(ID), path("${ID}_${MODE}_profile.tsv"), emit: sylph_tsv
 
     script:
     """
     sylph profile -t ${task.cpus} ${sylph_db} ${sylph_sketch} > ${ID}_${MODE}_profile.tsv
-
-    sed -n '2p' ${ID}_${MODE}_profile.tsv \
-        | awk -F'\t' '\$4 > 98 {found=1} END {print (found ? "PASS" : "FAIL")}'
     """
 }

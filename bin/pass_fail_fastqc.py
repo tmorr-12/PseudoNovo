@@ -8,20 +8,19 @@ class InvalidFastQCReportError(Exception):
     pass
 
 
-def process_report(reports, criteria_file):
+def process_report(report, criteria_file):
     with open(criteria_file) as j:
         pass_criteria = set(json.load(j))
 
-    for report in reports:
-        with open(report) as f:
-            for line in f:
-                fields = line.strip("\n").split('\t')
+    with open(report) as f:
+        for line in f:
+            fields = line.strip("\n").split('\t')
 
-                if len(fields) != 3:
-                    raise InvalidFastQCReportError(f"Invalid FastQC Report: {report}")
+            if len(fields) != 3:
+                raise InvalidFastQCReportError(f"Invalid FastQC Report: {report}")
 
-                if fields[1] in pass_criteria and fields[0] == "FAIL":
-                    return "FAIL"
+            if fields[1] in pass_criteria and fields[0] == "FAIL":
+                return "FAIL"
 
     return "PASS"
 
@@ -31,8 +30,7 @@ def parse_args():
         description="Return 'PASS' or 'FAIL' after parsing FastQC report based on pass criteria"
     )
     parser.add_argument(
-        "--summary_files",
-        nargs="+",
+        "--summary_file",
         type=Path,
         help="List of summary.txt files produced by FastQC"
     )
@@ -48,7 +46,7 @@ if __name__ == "__main__":
     args = parse_args()
 
     outcome = process_report(
-        args.summary_files,
+        args.summary_file,
         args.pass_criteria_json
     )
 

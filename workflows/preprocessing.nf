@@ -10,12 +10,10 @@ workflow PREPROCESSING {
 
     main:
     if (params.mode == 'short') {
-        SHORT_READ_PREPROCESSING(input_ch)
-            .set { preprocessed_ch }
+        SHORT_READ_PREPROCESSING(input_ch).set { preprocessed_ch }
 
     } else if (params.mode == 'long') {
-        LONG_READ_PREPROCESSING(input_ch)
-            .set { preprocessed_ch }
+        LONG_READ_PREPROCESSING(input_ch).set { preprocessed_ch }
 
     } else if (params.mode == 'hybrid') {
         short_reads_ch = input_ch.map { ID, reads, size -> tuple(ID, [reads[0], reads[1]], size) }

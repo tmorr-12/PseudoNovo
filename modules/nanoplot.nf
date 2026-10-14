@@ -10,30 +10,12 @@ process NANOPLOT {
     val(stage)
 
     output:
-    tuple val(ID), path(reads), val(size), path("*.txt"), emit: nanostats
-    tuple val(ID), path("*.html"), emit: html
+    tuple val(ID), path("*.txt"), emit: nanostats
 
     script:
     def long_fastq="${reads[0]}"
     """
     NanoPlot --fastq ${long_fastq} --N50 -p ${ID}_${stage} --threads ${task.cpus}
-    """
-}
-
-process FILTER_NANOPLOT {
-    tag "${ID}"
-    label 'minimal'
-
-    input:
-    tuple val(ID), path(reads), val(size), path(nanostats_txt)
-
-    output:
-    tuple val(ID), path(reads), val(size), stdout, emit: nanoplot_out
-
-    script:
-    def command = "${projectDir}/bin/pass_fail_nanoplot.py"
-    """
-    ${command} ${ID} ${nanostats_txt} ${params.min_depth} ${params.lower_assembly_length}
     """
 }
 
@@ -47,7 +29,7 @@ process COMPARE_NANOPLOT {
     tuple val(ID), path(pre_report), path(post_report)
 
     output:
-    path("${ID}_NanoStats_Summary.tsv")
+    path("${ID}_NanoStats_Summary.tsv"), emit: nanostats
 
     script:
     def command = "${projectDir}/bin/compare_nanoplot.py"

@@ -41,6 +41,7 @@ def qc_row(row, args):
         - GC content: ±10% target GC content
         - CheckM2 Completeness: At least 98% completeness (default)
         - CheckM2 Contamination: No more than 2% contamination (default)
+        - GTDBTk classification of 's__Pseudomonas aeruginosa'
     """
     failed = []
 
