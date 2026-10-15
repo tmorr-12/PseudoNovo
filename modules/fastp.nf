@@ -5,8 +5,8 @@ process FASTP {
 
     container "quay.io/biocontainers/fastp:1.3.3--h43da1c4_0"
 
-    publishDir "${params.outdir}/fastp", pattern: "*.json"
-    publishDir "${params.outdir}/fastp/failed_reads", pattern: "*_failed.fastq"
+    publishDir "${params.outdir}/00-INTERMEDIATES/fastp", pattern: "*.json"
+    publishDir "${params.outdir}/00-INTERMEDIATES/fastp/failed_reads", pattern: "*_failed.fastq"
 
     input:
     tuple val(ID), path(reads), val(size)

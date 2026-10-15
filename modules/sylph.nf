@@ -38,7 +38,7 @@ process SYLPH_PROFILE {
 
     container "quay.io/biocontainers/sylph:1.0.0--hb42e459_0"
 
-    publishDir "${params.outdir}/sylph", pattern: '*.tsv'
+    publishDir "${params.outdir}/00-INTERMEDIATES/sylph", pattern: '*.tsv'
 
     input:
     tuple val(ID), path(reads), val(genome_size), path(sylph_sketch), val(MODE)

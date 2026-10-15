@@ -23,7 +23,7 @@ process COMPARE_NANOPLOT {
     tag "${ID}"
     label 'minimal'
 
-    publishDir "${params.outdir}/nanoplot"
+    publishDir "${params.outdir}/00-INTERMEDIATES/nanoplot"
 
     input:
     tuple val(ID), path(pre_report), path(post_report)

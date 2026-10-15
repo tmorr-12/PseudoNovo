@@ -5,7 +5,7 @@ process CHECKV {
 
     container "quay.io/biocontainers/checkv:1.1.1--pyh106432d_1"
 
-    publishDir "${params.outdir}/annotations", pattern: "*_checkv_summary.tsv"
+    publishDir "${params.outdir}/02-ANNOTATIONS/checkv", pattern: "*_checkv_summary.tsv"
 
     input:
     tuple val(ID), path(genomad_fna)

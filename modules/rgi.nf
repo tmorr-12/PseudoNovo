@@ -5,7 +5,7 @@ process RGI {
 
     container "quay.io/biocontainers/rgi:6.0.8--pyh05cac1d_0"
 
-    publishDir "${params.outdir}/annotations"
+    publishDir "${params.outdir}/02-ANNOTATIONS/rgi"
 
     input:
     tuple val(ID), path(contigs)

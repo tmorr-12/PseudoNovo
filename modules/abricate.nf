@@ -5,7 +5,7 @@ process ABRICATE {
 
     container "quay.io/biocontainers/abricate:1.4.0--h05cac1d_0"
 
-    publishDir "${params.outdir}/annotations"
+    publishDir "${params.outdir}/02-ANNOTATIONS/abricate"
 
     input:
     tuple val(ID), path(contigs)

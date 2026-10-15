@@ -5,7 +5,7 @@ process GENOMAD {
 
     container "quay.io/biocontainers/genomad:1.12.0--pyhdfd78af_0"
 
-    publishDir "${params.outdir}/annotations", pattern: "*_virus_*.tsv"
+    publishDir "${params.outdir}/02-ANNOTATIONS/genomad", pattern: "*_virus_*.tsv"
 
     input:
     tuple val(ID), path(contigs)

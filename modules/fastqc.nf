@@ -4,6 +4,8 @@ process FASTQC {
 
     container "quay.io/biocontainers/fastqc:0.13.0--hdfd78af_0"
 
+    publishDir "${params.outdir}/00-INTERMEDIATES/fastqc", pattern: "*_summary.txt"
+
     input:
     tuple val(ID), path(reads), val(size)
 

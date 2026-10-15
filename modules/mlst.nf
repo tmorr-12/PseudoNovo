@@ -5,6 +5,8 @@ process MLST {
 
     container "quay.io/biocontainers/mlst:2.35.0--hdfd78af_0"
 
+    publishDir "${params.outdir}/00-INTERMEDIATES/mlst", pattern: "*_mlst.tsv"
+
     input:
     tuple val(ID), path(contigs)
 

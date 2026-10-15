@@ -5,7 +5,7 @@ process HOSTILE {
 
     container "quay.io/biocontainers/hostile:2.0.2--pyhdfd78af_0"
 
-    publishDir "${params.outdir}/hostile", pattern: "*.json"
+    publishDir "${params.outdir}/00-INTERMEDIATES/hostile", pattern: "*.json"
 
     input:
     tuple val(ID), path(reads), val(size)

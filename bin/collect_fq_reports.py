@@ -32,14 +32,18 @@ def main():
         rows["nanoplot"] = args.nanoplot
 
     status = "PASS"
-    for _, value in rows.items():
+    failed = []
+    for key, value in rows.items():
         if value == "FAIL":
+            failed.append(key)
             status = "FAIL"
 
     rows["QC Status"] = status
+    rows["QC Failed Fields"] = ", ".join(failed)
     print(status)
 
     df = pd.DataFrame([rows])
+    df = df[["ID", "QC Status", "QC Failed Fields"]]
     df.to_csv(f"{args.id}_{args.mode}_fq_report.tsv", sep="\t", index=False)
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ process CHECKM2 {
 
     container "quay.io/biocontainers/checkm2:1.1.0--pyh7e72e81_1"
 
-    publishDir "${params.outdir}/checkm2", pattern: "*_checkm2.tsv"
+    publishDir "${params.outdir}/00-INTERMEDIATES/checkm2", pattern: "*_checkm2.tsv"
 
     input:
     tuple val(ID), path(fasta)

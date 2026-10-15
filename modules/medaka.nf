@@ -5,7 +5,7 @@ process MEDAKA {
 
     container "quay.io/biocontainers/medaka:2.2.2--py312h3050eb1_0"
 
-    publishDir "${params.outdir}/autocycler_polished", pattern: "*.fasta"
+    publishDir "${params.outdir}/00-INTERMEDIATES/autocycler_polished", pattern: "*.fasta"
 
     input:
     tuple val(ID), path(reads), path(fasta)

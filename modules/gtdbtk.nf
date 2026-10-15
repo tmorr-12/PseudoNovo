@@ -5,7 +5,7 @@ process GTDBTK {
 
     container "quay.io/biocontainers/gtdbtk:2.7.2--pyhdfd78af_1"
 
-    publishDir "${params.outdir}/gtdbtk"
+    publishDir "${params.outdir}/00-INTERMEDIATES/gtdbtk"
 
     input:
     tuple val(ID), path(contigs, stageAs: "fastas/*")

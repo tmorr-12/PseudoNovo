@@ -5,7 +5,7 @@ process QUAST {
 
     container 'quay.io/biocontainers/quast:5.3.0--py39pl5321heaaa4ec_0'
 
-    publishDir "${params.outdir}/quast", pattern: "*_quast_report.tsv"
+    publishDir "${params.outdir}/00-INTERMEDIATES/quast", pattern: "*_quast_report.tsv"
 
     input:
     tuple val(ID), path(fasta)
