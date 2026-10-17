@@ -6,10 +6,9 @@ include { NANOPLOT as NANOPLOT_PRE
 include { PORECHOP_ABI } from '../modules/porechop_abi.nf'
 include { CHOPPER } from '../modules/chopper.nf'
 include { RASUSA } from '../modules/rasusa.nf'
-include { COLLECT_FASTQ_REPORTS 
-          MERGE_REPORTS } from '../modules/reporting.nf'
 
-include { DECONTAMINATION } from '../subworkflows/decontamination.nf'
+include { DECONTAMINATION 
+          CREATE_FASTQ_REPORT } from '../subworkflows/generic_preprocessing.nf'
 
 workflow LONG_READ_PREPROCESSING {
 
@@ -50,15 +49,8 @@ workflow LONG_READ_PREPROCESSING {
             tuple(ID, reads, size, [], [], [], tsv, stats)
         }
 
-    COLLECT_FASTQ_REPORTS(report_in_ch)
-
-    COLLECT_FASTQ_REPORTS.out.qc_status
-    | filter { it -> it[3].trim() == 'PASS' }
-    | map { it -> it[0..2] }
-    | set { long_out_ch }
-
-    merge_ch = COLLECT_FASTQ_REPORTS.out.report.collect()
-    MERGE_REPORTS(merge_ch, "long-read-qc-report")
+    CREATE_FASTQ_REPORT(report_in_ch, "long")
+    long_out_ch = CREATE_FASTQ_REPORT.out.out_ch
 
     emit:
     long_out_ch
