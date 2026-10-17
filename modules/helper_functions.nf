@@ -12,7 +12,6 @@ Main:
     --mode                              Options: short, long, hybrid (default: short)
     --skip_preprocessing                Skip preprocessing step (default: false)
     --help                              Show this help message and exit
-    --remove_host_reads                 Remove host reads from input data (default: false)
 
 Databases:
     --sylph_db                          Path to sylph database (e.g. /path/to/.sylphdb)
