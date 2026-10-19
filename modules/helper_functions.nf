@@ -17,6 +17,11 @@ Databases:
     --sylph_db                          Path to sylph database (e.g. /path/to/.sylphdb)
     --checkm2_db                        Path to checkm2 database (e.g. /path/to/.dmnd)
     --bakta_db                          Path to bakta database (e.g. /path/to/database)
+    --card_db                           Path to card database (e.g. /path/to/card)
+    --gtdb                              Path to genome taxonomy database (e.g. /path/to/release232)
+    --genomad_db                        Path to genomad database (e.g. /path/to/genomad_db)
+    --checkv_db                         Path to checkv database (e.g. /path/to/checkv-db-v1.5)
+    --defensefinder_models              Path to defense finder models (e.g. /path/to/.macsyfinder/models)
 
 QC Options:
     --min_depth                         Minimum read coverage (default: 30)

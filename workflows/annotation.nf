@@ -1,6 +1,6 @@
 #!/usr/bin/env nextflow
 
-include { BAKTA } from '../modules/bakta.nf'
+// include { BAKTA } from '../modules/bakta.nf'
 include { ABRICATE } from '../modules/abricate.nf'
 include { RGI } from '../modules/rgi.nf'
 include { GENOMAD } from '../modules/genomad.nf'
@@ -14,14 +14,14 @@ workflow ANNOTATION {
     contigs_ch
 
     main:
-    bakta_db_ch = Channel.value(file(params.bakta_db, checkIfExists: true))
+    // bakta_db_ch = Channel.value(file(params.bakta_db, checkIfExists: true))
     card_db_ch = Channel.fromPath("${params.card_db}/*", checkIfExists: true).collect()
     genomad_db_ch = Channel.value(file(params.genomad_db, checkIfExists: true))
     defensefinder_models = Channel.value(file(params.defensefinder_models, checkIfExists: true))
 
     contigs_ch
         .multiMap { it ->
-            bakta: it
+            // bakta: it
             abricate: it
             rgi: it
             genomad: it
@@ -30,7 +30,7 @@ workflow ANNOTATION {
         }
         .set { split_ch }
 
-    BAKTA(split_ch.bakta, bakta_db_ch)
+    // BAKTA(split_ch.bakta, bakta_db_ch)
     ABRICATE(split_ch.abricate)
     RGI(split_ch.rgi, card_db_ch)
 
