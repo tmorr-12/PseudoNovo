@@ -1,5 +1,10 @@
 [
     {
+        "tool": "gtdbtk",
+        "id_col": "user_genome",
+        "keep_columns": ["classification"]
+    },
+    {
         "tool": "quast",
         "id_col": "Assembly",
         "keep_columns": ["Assembly", "N50", "Total length", "# contigs", "# contigs (>= 1000 bp)"]

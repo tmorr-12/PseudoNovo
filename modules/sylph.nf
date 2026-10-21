@@ -1,9 +1,9 @@
 process SYLPH_SKETCH {
     // https://github.com/bluenote-1577/sylph
     tag "${ID}"
-    label 'medium'
+    label 'minimal'
 
-    container "quay.io/biocontainers/sylph:0.9.0--ha6fb395_0"
+    container "quay.io/biocontainers/sylph:1.0.0--hb42e459_0"
 
     input:
     tuple val(ID), path(reads), val(genome_size)
@@ -36,23 +36,20 @@ process SYLPH_PROFILE {
     tag "${ID}"
     label 'medium'
 
-    container "quay.io/biocontainers/sylph:0.9.0--ha6fb395_0"
+    container "quay.io/biocontainers/sylph:1.0.0--hb42e459_0"
 
-    publishDir "${params.outdir}/${ID}", pattern: '*.tsv'
+    publishDir "${params.outdir}/00-INTERMEDIATES/sylph", pattern: '*.tsv'
 
     input:
     tuple val(ID), path(reads), val(genome_size), path(sylph_sketch), val(MODE)
     path(sylph_db)
 
     output:
-    tuple val(ID), path(reads), val(genome_size), stdout, emit: sylph_out
-    path("${ID}_${MODE}_profile.tsv"), emit: sylph_tsv
+    tuple val(ID), path(reads), val(genome_size), emit: reads_out
+    tuple val(ID), path("${ID}_${MODE}_profile.tsv"), emit: sylph_tsv
 
     script:
     """
     sylph profile -t ${task.cpus} ${sylph_db} ${sylph_sketch} > ${ID}_${MODE}_profile.tsv
-
-    sed -n '2p' ${ID}_${MODE}_profile.tsv \
-        | awk -F'\t' '\$4 > 98 {found=1} END {print (found ? "PASS" : "FAIL")}'
     """
 }

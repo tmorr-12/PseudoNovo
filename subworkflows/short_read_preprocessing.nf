@@ -1,14 +1,12 @@
 #!/usr/bin/env nextflow
 
-include { FASTQC 
-          FILTER_FASTQC } from '../modules/fastqc.nf'
-include { FASTP 
-          FILTER_FASTP } from '../modules/fastp.nf'
-include { BWA
-          SAMTOOLS
-          FILTER_SAMTOOLS } from '../modules/mapping.nf'
-
-include { DECONTAMINATION } from '../subworkflows/decontamination.nf'
+include { FASTQC } from '../modules/fastqc.nf'
+include { FASTP } from '../modules/fastp.nf'
+include { COLLECT_FASTQ_REPORTS 
+          MERGE_REPORTS } from '../modules/reporting.nf'
+          
+include { DECONTAMINATION 
+          CREATE_FASTQ_REPORT } from '../subworkflows/generic_preprocessing.nf'
 
 workflow SHORT_READ_PREPROCESSING {
 
@@ -16,35 +14,26 @@ workflow SHORT_READ_PREPROCESSING {
     input_ch
 
     main:
-    FASTQC(input_ch)
-    
-    FILTER_FASTQC(FASTQC.out.zip)
-    | filter { it -> it[3].trim() == 'PASS' }
-    | map { it -> it[0..2] }
-    | set { fastqc_out_ch }
-    
-    FASTP(fastqc_out_ch)
+    // still run fastp to assess depth, just don't take the trimmed reads
+    FASTP(input_ch)
+    filter_ch = params.trim_adaptors ? FASTP.out.fastp_out_ch : input_ch
+    fastp_json_ch = FASTP.out.json
 
-    FILTER_FASTP(FASTP.out.fastp)
-    | filter { it -> it[3].trim() == 'PASS' }
-    | map { it -> it[0..2] }
-    | DECONTAMINATION
+    FASTQC(filter_ch)
     
-    if (params.reference) {
-        ref_ch = Channel.value(file(params.reference, checkIfExists: true))
-        mapping_ch = DECONTAMINATION.out
-        BWA(mapping_ch, ref_ch) 
-        | SAMTOOLS
-        | FILTER_SAMTOOLS
+    DECONTAMINATION(filter_ch)
+    
+    report_in_ch = DECONTAMINATION.out.reads_out_ch
+        .join(FASTQC.out.r1_summary)
+        .join(FASTQC.out.r2_summary)
+        .join(fastp_json_ch)
+        .join(DECONTAMINATION.out.sylph_tsv)
+        .map { ID, reads, size, fq_r1, fq_r2, json, tsv ->
+            tuple(ID, reads, size, fq_r1, fq_r2, json, tsv, [])
+        }
 
-        FILTER_SAMTOOLS.out.samtools_out
-        | filter { it -> it[3].trim() == 'PASS' }
-        | map { it -> it[0..2] }
-        | set { short_out_ch }
-        
-    } else {
-        short_out_ch = DECONTAMINATION.out
-    }
+    CREATE_FASTQ_REPORT(report_in_ch, "short")
+    short_out_ch = CREATE_FASTQ_REPORT.out.out_ch
 
     emit:
     short_out_ch

@@ -1,109 +1,109 @@
 %%metro title: PseudoNovo
-%%metro track_gap: 1
-%%metro mode: light
+%%metro stroke_scale: 1
+%%metro compact_offsets: true
+%%metro font_scale: 1
+%%metro track_gap: 2.5
+%%metro mode: dark
 %%metro style: nfcore
 %%metro file: short_reads_in | FASTQ
 %%metro file: long_reads_in | FASTQ
-%%metro line: short | Short Reads | #2db572
-%%metro line: long | Long Reads | #f5c542
-%%metro line: hybrid | Hybrid Reads | #ff7142
-%%metro line: spur | Reporting | #0570b0
-%%metro line: help1 | * Process(es) skipped by default | 
-%%metro line: help2 | ** Entry point if --skip_preprocessing flag is supplied |
-%%metro section_y_gap: 0
+%%metro line: short | Short Reads | #0098D4
+%%metro line: long | Long Reads | #FFD300
+%%metro line: hybrid | Hybrid Reads | #F0443A
+%%metro line: help1 | * Entry point if --skip_preprocessing flag is supplied | #ffffff
 
 graph LR
-    subgraph short_pre [Short Read Preprocessing]
-        fastqc([Fastqc])
-        filter_fastqc([Filter Fastqc])
+    subgraph short_pre [FASTQ Preprocessing]
+        fastqc([FastQC])
         fastp([Fastp])
-        filter_fastp([Filter Fastp])
+        sylph_sh([Sylph])
 
-        short_reads_in -->|short| fastqc
-        fastqc -->|short| filter_fastqc
-        filter_fastqc -->|short| fastp
-        fastp -->|short| filter_fastp
-    end
-    subgraph long_pre [Long Read Preprocessing]
-        nanoplot_pre([Nanoplot Pre])
-        porechop_abi([Porechop_ABI*])
-        filter_nanoplot([Filter Nanoplot])
-        chopper([Chopper])
+        short_reads_in -->|short| fastp
+        fastp -->|short| fastqc
+        fastqc -->|short| sylph_sh
 
-        long_reads_in -->|long| nanoplot_pre
-        nanoplot_pre -->|long| filter_nanoplot
-        filter_nanoplot -->|long| porechop_abi
-        porechop_abi -->|long| chopper
-        filter_nanoplot -->|long| chopper
-    end
-    subgraph decontamination[Decontamination]
-        hostile([Hostile*])
-        sylph_sketch([Sylph Sketch])
-        sylph_profile([Sylph Profile])
+        porechop_abi([Chopper])
+        sylph_lg([Sylph])
+        nanoplot([Nanoplot])
 
-        hostile -->|short, long| sylph_sketch
-        sylph_sketch -->|short, long| sylph_profile
+        long_reads_in -->|long| porechop_abi
+        porechop_abi -->|long| sylph_lg
+        sylph_lg -->|long| nanoplot
     end
-    subgraph short_ref[Short Read Mapping*]
-        bwa([BWA])
-        samtools([Samtools])
-        filter_samtools([Filter Samtools])
-
-        bwa -->|short| samtools
-        samtools -->|short| filter_samtools
-    end
-    subgraph long_read_report[Long Read Reporting]
-        rasusa([Rasusa*])
-        nanoplot_post([Nanoplot Post])
-        compare_nanoplot([Compare Nanoplot])
-
-        rasusa -->|long| nanoplot_post
-        nanoplot_post -->|long| compare_nanoplot
-    end
-    subgraph preprocessed_out[Checkpoint**]
-    	preprocessed_reads([Preprocessed Reads])
-    end
-    subgraph assembly[Assembly]
-        unicycler_short([Unicycler Short])
-        unicycler_hybrid([Unicycler Hybrid])
+    subgraph assembly [Assembly*]
+        %% Short read assembly
+        unicycler([Unicycler])
+        _test([test])
+        
+        unicycler -->|short| _test
+        
+        %% Long read assembly
         autocycler([Autocycler])
-        quast([Quast])
-        checkm2([Checkm2])
-        mlst([Mlst])
-        collect_reports([Collect Reports])
+        medaka([Medaka])
 
-        unicycler_short -->|short| quast
-        unicycler_short -->|short| checkm2
-        unicycler_short -->|short| mlst
-        autocycler -->|long| quast
-        autocycler -->|long| checkm2
-        autocycler -->|long| mlst
-        unicycler_hybrid -->|hybrid| quast
-        unicycler_hybrid -->|hybrid| checkm2
-        unicycler_hybrid -->|hybrid| mlst
-        quast -->|short, long, hybrid| collect_reports
-        checkm2 -->|short, long, hybrid| collect_reports
-        mlst -->|short, long, hybrid| collect_reports
+        autocycler -->|long| medaka
+        
+        %% Hybrid read assembly
+        polypolish([Polypolish])
+        pypolca([Pypolca])
+
+        autocycler -->|hybrid| polypolish
+        polypolish -->|hybrid| pypolca
     end
+    subgraph assembly_qc[Assembly QC]
+    	quast([Quast])
+        checkm2([CheckM2])
+        mlst([mlst])
+        gtdbtk([GTDB-Tk])
+	end
     subgraph annotation[Annotation]
     	bakta([Bakta])
         abricate([Abricate])
+        rgi([RGI])
+        genomad([geNomad])
+        defensefinder([DefenseFinder])
     end
-    subgraph reporting[Reporting]
-    	merge_reports([Merge Reports])
-    end
-    %% Inter-section edges
-    filter_fastp -->|short| hostile
-    chopper -->|long| hostile
-    sylph_profile -->|long| rasusa
-    sylph_profile -->|short| bwa
-    
-    filter_samtools -->|short|preprocessed_reads
-    compare_nanoplot -->|long|preprocessed_reads
-    preprocessed_reads -->|short|unicycler_short
-    preprocessed_reads -->|long|autocycler
-    preprocessed_reads -->|hybrid|unicycler_hybrid
 
-	collect_reports -->|short,long,hybrid| bakta
-    collect_reports -->|short,long,hybrid| abricate
-    collect_reports -->|spur| merge_reports
+	sylph_sh -->|short| unicycler
+	nanoplot -->|long| autocycler
+    sylph_sh -->|hybrid| polypolish
+    
+    _test -->|short| quast
+    _test -->|short| checkm2
+    _test -->|short| mlst
+    _test -->|short| gtdbtk
+    
+    pypolca -->|hybrid| quast
+    pypolca -->|hybrid| checkm2
+    pypolca -->|hybrid| mlst
+    pypolca -->|hybrid| gtdbtk
+    
+    medaka -->|long| quast
+    medaka -->|long| checkm2
+    medaka -->|long| mlst
+    medaka -->|long| gtdbtk
+    
+    quast -->|short,hybrid,long| bakta
+    checkm2 -->|short,hybrid,long| bakta
+    mlst -->|short,hybrid,long| bakta
+    gtdbtk -->|short,hybrid,long| bakta
+    
+    quast -->|short,hybrid,long| abricate
+    checkm2 -->|short,hybrid,long| abricate
+    mlst -->|short,hybrid,long| abricate
+    gtdbtk -->|short,hybrid,long| abricate
+    
+    quast -->|short,hybrid,long| rgi
+    checkm2 -->|short,hybrid,long| rgi
+    mlst -->|short,hybrid,long| rgi
+    gtdbtk -->|short,hybrid,long| rgi
+
+	quast -->|short,hybrid,long| genomad
+    checkm2 -->|short,hybrid,long| genomad
+    mlst -->|short,hybrid,long| genomad
+    gtdbtk -->|short,hybrid,long| genomad
+    
+    quast -->|short,hybrid,long| defensefinder
+    checkm2 -->|short,hybrid,long| defensefinder
+    mlst -->|short,hybrid,long| defensefinder
+    gtdbtk -->|short,hybrid,long| defensefinder

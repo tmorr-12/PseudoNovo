@@ -1,13 +1,18 @@
 #!/usr/bin/env nextflow
 
-include { UNICYCLER_SHORT
-          UNICYCLER_HYBRID } from '../modules/unicycler.nf'
+include { UNICYCLER_SHORT } from '../modules/unicycler.nf'
 include { AUTOCYCLER } from '../modules/autocycler.nf'
+include { MEDAKA } from '../modules/medaka.nf'
+include { BWA_POLYPOLISH
+          POLYPOLISH } from '../modules/polypolish.nf'
+include { PYPOLCA } from '../modules/pypolca.nf'
 include { QUAST } from '../modules/quast.nf'
 include { CHECKM2 } from '../modules/checkm2.nf'
 include { MLST } from '../modules/mlst.nf'
-include { COLLECT_REPORTS 
+include { GTDBTK } from '../modules/gtdbtk.nf'
+include { COLLECT_ASSEMBLY_REPORTS 
           MERGE_REPORTS } from '../modules/reporting.nf'
+include { PUBLISH_ASSEMBLY } from '../modules/publish_assembly.nf'
 
 workflow ASSEMBLY {
 
@@ -18,14 +23,16 @@ workflow ASSEMBLY {
     if (params.mode == "short") {
         UNICYCLER_SHORT(assembly_ch)
         qc_ch = UNICYCLER_SHORT.out.fasta_ch
-
     } else if (params.mode == "long") {
         AUTOCYCLER(assembly_ch)
-        qc_ch = AUTOCYCLER.out.fasta_ch
-        
+        | MEDAKA
+        qc_ch = MEDAKA.out.polished_ch
     } else if (params.mode == "hybrid") {
-        UNICYCLER_HYBRID(assembly_ch)
-        qc_ch = UNICYCLER_HYBRID.out.fasta_ch
+        AUTOCYCLER(assembly_ch)
+        | BWA_POLYPOLISH
+        | POLYPOLISH
+        | PYPOLCA
+        qc_ch = PYPOLCA.out.hybrid_ch
     }
     
     qc_ch
@@ -33,6 +40,7 @@ workflow ASSEMBLY {
             quast: it
             checkm2: it
             mlst: it
+            gtdbtk: it
         }
         .set { split_ch }
 
@@ -43,23 +51,28 @@ workflow ASSEMBLY {
 
     MLST(split_ch.mlst)
 
+    GTDBTK(split_ch.gtdbtk)
+
     report_ch = qc_ch
         .join(QUAST.out.quast_out)
         .join(CHECKM2.out.checkm2_out)
         .join(MLST.out.mlst_out)
+        .join(GTDBTK.out.gtdbtk_out)
         .map { it ->
             tuple(it[0], it[1], it[2..-1])
         }
 
-    COLLECT_REPORTS(report_ch)
+    COLLECT_ASSEMBLY_REPORTS(report_ch)
 
-    merge_ch = COLLECT_REPORTS.out.report.collect()
-    MERGE_REPORTS(merge_ch)
+    merge_ch = COLLECT_ASSEMBLY_REPORTS.out.report.collect()
+    MERGE_REPORTS(merge_ch, "assembly-report")
 
-    COLLECT_REPORTS.out.contigs
+    COLLECT_ASSEMBLY_REPORTS.out.contigs
         | filter { it -> it[2].trim() == 'PASS' }
         | map { it -> it[0..1] }
         | set { contigs_ch }
+
+    PUBLISH_ASSEMBLY(contigs_ch)
 
     emit:
     contigs_ch

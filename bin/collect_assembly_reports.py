@@ -29,6 +29,7 @@ def parse_args():
     qc_fields.add_argument("--completeness", type=float, required=True, help="Threshold CheckM2 completeness score")
     qc_fields.add_argument("--contamination", type=float, required=True, help="Threshold CheckM2 contamination score")
     qc_fields.add_argument("--gc", type=float, required=True, help="Target genome GC content")
+    qc_fields.add_argument("--gtdb_classification", type=str, required=True, help="GTDBTk classification")
 
     return parser.parse_args()
 
@@ -40,6 +41,7 @@ def qc_row(row, args):
         - GC content: ±10% target GC content
         - CheckM2 Completeness: At least 98% completeness (default)
         - CheckM2 Contamination: No more than 2% contamination (default)
+        - GTDBTk classification of 's__Pseudomonas aeruginosa'
     """
     failed = []
 
@@ -62,10 +64,15 @@ def qc_row(row, args):
 
     # === checkm2 GC content ===
 
-    min_gc = args.gc * 0.9
-    max_gc = args.gc * 1.1
+    min_gc = args.gc * 0.98
+    max_gc = args.gc * 1.02
     if not (min_gc <= row["GC_Content"] <= max_gc):
         failed.append("GC_Content")
+
+    # === gtdbtk classification ===
+
+    if row["classification"] != args.gtdb_classification:
+        failed.append("classification")
 
     # === End ===
 
