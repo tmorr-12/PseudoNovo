@@ -26,7 +26,6 @@ process GENOMAD {
         ${genomad_db}
 
     mv genomad_out/${ID}_contigs_summary/${ID}_contigs_virus.fna ${ID}_virus.fna
-    mv genomad_out/${ID}_contigs_summary/${ID}_contigs_virus_summary.tsv ${ID}_virus_summary.tsv
     mv genomad_out/${ID}_contigs_summary/${ID}_contigs_virus_genes.tsv ${ID}_virus_genes.tsv
     """
 }

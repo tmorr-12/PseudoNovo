@@ -19,70 +19,22 @@ LOWER_ASSEMBLY_LENGTH=""
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --id)
-            ID="$2"
-            shift 2
-            ;;
-        --mode)
-            MODE="$2"
-            shift 2
-            ;;
-        --collect_fq_reports)
-            COLLECT_FQ_REPORTS="$2"
-            shift 2
-            ;;
-        --pass_fail_fastqc)
-            PASS_FAIL_FASTQC="$2"
-            shift 2
-            ;;
-        --pass_fail_fastp)
-            PASS_FAIL_FASTP="$2"
-            shift 2
-            ;;
-        --pass_fail_nanoplot)
-            PASS_FAIL_NANOPLOT="$2"
-            shift 2
-            ;;
-        --sylph_profile_tsv)
-            SYLPH_PROFILE_TSV="$2"
-            shift 2
-            ;;
-        --fastqc_r1_summary)
-            FASTQC_R1_SUMMARY="$2"
-            shift 2
-            ;;
-        --fastqc_r2_summary)
-            FASTQC_R2_SUMMARY="$2"
-            shift 2
-            ;;
-        --fastqc_pass_criteria)
-            FASTQC_PASS_CRITERIA="$2"
-            shift 2
-            ;;
-        --fastp_json)
-            FASTP_JSON="$2"
-            shift 2
-            ;;
-        --nanoplot_out)
-            NANOPLOT_OUT="$2"
-            shift 2
-            ;;
-        --min_depth)
-            MIN_DEPTH="$2"
-            shift 2
-            ;;
-        --lower_assembly_length)
-            LOWER_ASSEMBLY_LENGTH="$2"
-            shift 2
-            ;;
-        -*)
-            echo "Error: Unknown argument -> $1" >&2
-            exit 1
-            ;;
-        *)
-            echo "Error: This script does not accept positional arguments" >&2
-            exit 1
-            ;;
+        --id)                     ID="$2"; shift 2 ;;
+        --mode)                   MODE="$2"; shift 2 ;;
+        --collect_fq_reports)     COLLECT_FQ_REPORTS="$2"; shift 2 ;;
+        --pass_fail_fastqc)       PASS_FAIL_FASTQC="$2"; shift 2 ;;
+        --pass_fail_fastp)        PASS_FAIL_FASTP="$2"; shift 2 ;;
+        --pass_fail_nanoplot)     PASS_FAIL_NANOPLOT="$2"; shift 2 ;;
+        --sylph_profile_tsv)      SYLPH_PROFILE_TSV="$2"; shift 2 ;;
+        --fastqc_r1_summary)      FASTQC_R1_SUMMARY="$2"; shift 2 ;;
+        --fastqc_r2_summary)      FASTQC_R2_SUMMARY="$2"; shift 2 ;;
+        --fastqc_pass_criteria)   FASTQC_PASS_CRITERIA="$2"; shift 2 ;;
+        --fastp_json)             FASTP_JSON="$2"; shift 2 ;;
+        --nanoplot_out)           NANOPLOT_OUT="$2"; shift 2 ;;
+        --min_depth)              MIN_DEPTH="$2"; shift 2 ;;
+        --lower_assembly_length)  LOWER_ASSEMBLY_LENGTH="$2"; shift 2 ;;
+        -*)  echo "Error: Unknown argument -> $1" >&2; exit 1 ;;
+        *)   echo "Error: This script does not accept positional arguments" >&2; exit 1 ;;
     esac
 done
 

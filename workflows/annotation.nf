@@ -6,7 +6,6 @@ include { RGI } from '../modules/rgi.nf'
 include { GENOMAD } from '../modules/genomad.nf'
 include { CHECKV } from '../modules/checkv.nf'
 include { DEFENSE_FINDER } from '../modules/defense_finder.nf'
-include { GECCO } from '../modules/gecco.nf'
 
 workflow ANNOTATION {
 
@@ -26,7 +25,6 @@ workflow ANNOTATION {
             rgi: it
             genomad: it
             defensefinder: it
-            gecco: it
         }
         .set { split_ch }
 
@@ -39,6 +37,5 @@ workflow ANNOTATION {
     CHECKV(checkv_input_ch)
 
     DEFENSE_FINDER(split_ch.defensefinder, defensefinder_models)
-    GECCO(split_ch.gecco)
 
 }
