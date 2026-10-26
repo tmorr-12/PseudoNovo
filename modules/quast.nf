@@ -13,12 +13,13 @@ process QUAST {
     output:
     tuple val(ID), path("${ID}_quast_report.tsv"), emit: quast_out
     tuple val('quast'), eval('quast.py --version | grep "QUAST" | sed \'s/^.*QUAST v//; s/ .*\$//\''), topic: versions
+    path "${ID}_quast", topic: multi_qc
 
     script:
     def quast_report = "${ID}_quast_report.tsv"
     """
-    quast.py ${fasta} -o quast --no-html --no-plots
-    mv quast/transposed_report.tsv ${quast_report}
+    quast.py ${fasta} -o ${ID}_quast --no-html --no-plots
+    cp ${ID}_quast/transposed_report.tsv ${quast_report}
     """
 
     stub:

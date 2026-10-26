@@ -8,6 +8,7 @@ include { printHelp
 include { PREPROCESSING } from './workflows/preprocessing.nf'
 include { ASSEMBLY } from './workflows/assembly.nf'
 include { ANNOTATION } from './workflows/annotation.nf'
+include { MULTIQC } from './modules/multiqc.nf'
 
 workflow {
 
@@ -32,6 +33,9 @@ workflow {
     ASSEMBLY(assembly_ch)
     | ANNOTATION
 
+    multi_qc_ch = channel.topic('multi_qc').collect()
+    MULTIQC(multi_qc_ch)
+
     channel.topic('versions')
         .unique()
         .map { tool, version -> "${tool}\t${version}" }
@@ -41,4 +45,5 @@ workflow {
             newLine: true,
             sort: true
         )
+
 }

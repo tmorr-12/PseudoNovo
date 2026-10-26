@@ -1,6 +1,7 @@
 #!/usr/bin/env nextflow
 
 include { UNICYCLER_SHORT } from '../modules/unicycler.nf'
+include { SHOVILL } from '../modules/shovill.nf'
 include { AUTOCYCLER } from '../modules/autocycler.nf'
 include { MEDAKA } from '../modules/medaka.nf'
 include { BWA_POLYPOLISH
@@ -21,8 +22,13 @@ workflow ASSEMBLY {
 
     main:
     if (params.mode == "short") {
-        UNICYCLER_SHORT(assembly_ch)
-        qc_ch = UNICYCLER_SHORT.out.fasta_ch
+        if (params.short_assembler == "unicycler") {
+            UNICYCLER_SHORT(assembly_ch)
+            qc_ch = UNICYCLER_SHORT.out.fasta_ch
+        } else if (params.short_assembler == "shovill") {
+            SHOVILL(assembly_ch)
+            qc_ch = SHOVILL.out.fasta_ch
+        }
 
     } else if (params.mode == "long") {
         AUTOCYCLER(assembly_ch)

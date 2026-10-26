@@ -14,6 +14,7 @@ process CHECKM2 {
     output:
     tuple val(ID), path("${ID}_checkm2.tsv"), emit: checkm2_out
     tuple val('checkm2'), eval('checkm2 --version'), topic: versions
+    path "${ID}_checkm2.tsv", topic: multi_qc
 
     script:
     """

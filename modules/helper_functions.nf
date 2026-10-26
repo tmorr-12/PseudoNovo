@@ -13,6 +13,9 @@ Main:
     --skip_preprocessing                Skip preprocessing step (default: false)
     --help                              Show this help message and exit
 
+Assembly:
+    --short_assembler                   Options: unicycler, shovill
+
 Databases:
     --sylph_db                          Path to sylph database (e.g. /path/to/.sylphdb)
     --checkm2_db                        Path to checkm2 database (e.g. /path/to/.dmnd)
@@ -56,7 +59,7 @@ def validateParams() {
     }
 
     if (!file(params.input).exists()) {
-        error "Error: Input manifest file '${params.input}' does not exist."
+        error "Input manifest file '${params.input}' does not exist."
     }
 
     if (params.mode && !(params.mode in ['short', 'long', 'hybrid'])) {
@@ -64,7 +67,11 @@ def validateParams() {
     }
 
     if (!(params.long_read_platform in ["ont", "pacbio"])) {
-        error "Error: Invalid long read platform, please choose: ont or pacbio"
+        error "Invalid long read platform, please choose: ont or pacbio"
+    }
+
+    if (!(params.short_assembler in ["unicycler", "shovill"])) {
+        error "Invalid short read assembler, please chose: unicycler or shovill"
     }
 }
 

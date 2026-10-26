@@ -13,6 +13,7 @@ process GTDBTK {
     output:
     tuple val(ID), path("${ID}_gtdbtk.tsv"), emit: gtdbtk_out
     tuple val('gtdbtk'), eval("gtdbtk --version | grep -Eo '[0-9]+(\\.[0-9]+)+' | head -1") , topic: versions
+    path "${ID}_gtdbtk.tsv", topic: multi_qc
 
     script:
     """

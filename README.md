@@ -116,6 +116,9 @@ Main:
     --skip_preprocessing                Skip preprocessing step (default: false)
     --help                              Show this help message and exit
 
+Assembly:
+    --short_assembler                   Options: unicycler, shovill
+
 Databases:
     --sylph_db                          Path to sylph database (e.g. /path/to/.sylphdb)
     --checkm2_db                        Path to checkm2 database (e.g. /path/to/.dmnd)
