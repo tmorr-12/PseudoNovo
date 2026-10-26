@@ -12,6 +12,7 @@ process PYPOLCA {
 
     output:
     tuple val(ID), path("${ID}_hybrid.fasta"), emit: hybrid_ch
+    tuple val('pypolca'), eval("pypolca --version | sed 's/^pypolca, version //'"), topic: versions
 
     script:
     def R1="${reads[0]}"

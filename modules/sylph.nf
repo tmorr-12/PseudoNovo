@@ -10,6 +10,7 @@ process SYLPH_SKETCH {
 
     output:
     tuple val(ID), path(reads), val(genome_size), path("${ID}_sketch/*.sylsp"), val(MODE), emit: sylph_sketch
+    tuple val('sylph'), eval('sylph -V | sed "s/sylph //g"'), topic: versions
 
     script:
     def n = reads.size()
@@ -55,6 +56,7 @@ process SYLPH_PROFILE {
     output:
     tuple val(ID), path(reads), val(genome_size), emit: reads_out
     tuple val(ID), path("${ID}_${MODE}_profile.tsv"), emit: sylph_tsv
+    tuple val('sylph'), eval('sylph -V | sed "s/sylph //g"'), topic: versions
 
     script:
     """

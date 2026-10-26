@@ -12,6 +12,7 @@ process UNICYCLER_SHORT {
 
     output:
     tuple val(ID), path("${ID}_contigs.fa"), emit: fasta_ch
+    tuple val('unicycler'), eval('TERM=xterm unicycler --version | sed "s/^.*Unicycler v//; s/ .*$//"'), topic: versions
 
     script:
     def R1="${reads[0]}"

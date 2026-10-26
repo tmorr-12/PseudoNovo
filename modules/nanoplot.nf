@@ -11,6 +11,7 @@ process NANOPLOT {
 
     output:
     tuple val(ID), path("*.txt"), emit: nanostats
+    tuple val('NanoPlot'), eval('NanoPlot --version | sed \'s/^.*NanoPlot //; s/ .*\$//\''), topic: versions
 
     script:
     def long_fastq="${reads[0]}"

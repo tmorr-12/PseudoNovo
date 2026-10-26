@@ -12,7 +12,7 @@ process ABRICATE {
 
     output:
     path("${ID}_plasmidfinder.tsv"), emit: abricate_out
-    
+    tuple val('abricate'), eval("abricate --version | sed 's/^.*abricate //'"), topic: versions
 
     script:
     """

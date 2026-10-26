@@ -13,6 +13,7 @@ process RGI {
 
     output:
     path("${ID}.txt"), emit: rgi_out
+    tuple val('rgi'), eval("rgi main --version"), topic: versions
 
     script:
     """

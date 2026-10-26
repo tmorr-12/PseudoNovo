@@ -12,6 +12,7 @@ process MEDAKA {
 
     output:
     tuple val(ID), path("${ID}_polished.fasta"), emit: polished_ch
+    tuple val('medaka'), eval('medaka --version | sed "s/medaka //g"'), topic: versions
 
     script:
     """

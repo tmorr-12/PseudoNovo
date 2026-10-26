@@ -14,6 +14,7 @@ process GENOMAD {
     output:
     tuple val(ID), path("${ID}_virus.fna"), emit: genomad_fna_ch
     path("${ID}_virus_genes.tsv"), emit: genomad_genes
+    tuple val('genomad'), eval("genomad --version | sed 's/^.*geNomad, version //; s/ .*//'"), topic: versions
 
     script:
     """

@@ -26,7 +26,7 @@ workflow LONG_READ_PREPROCESSING {
     }
     
     CHOPPER(filter_ch)
-    | DECONTAMINATION
+    DECONTAMINATION(CHOPPER.out.chopper_out)
 
     if (params.downsample_reads) {
         RASUSA(DECONTAMINATION.out.reads_out_ch)

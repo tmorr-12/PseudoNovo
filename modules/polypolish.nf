@@ -9,7 +9,8 @@ process BWA_POLYPOLISH {
     tuple val(ID), path(reads), path(fasta)
 
     output:
-    tuple val(ID), path(reads), path(fasta), path("${ID}_1.sam"), path("${ID}_2.sam")
+    tuple val(ID), path(reads), path(fasta), path("${ID}_1.sam"), path("${ID}_2.sam"), emit: sam_out
+    tuple val('bwamem2'), eval('bwa-mem2 version | grep -o -E "[0-9]+(\\.[0-9]+)+"'), topic: versions
 
     script:
     def R1="${reads[0]}"
@@ -39,6 +40,7 @@ process POLYPOLISH {
 
     output:
     tuple val(ID), path(reads), path("${ID}_polished.fasta"), emit: polished_ch
+    tuple val('polypolish'), eval("polypolish polish --version | sed '1!d;s/Polypolish-polish //'"), topic: versions
 
     script:
     """

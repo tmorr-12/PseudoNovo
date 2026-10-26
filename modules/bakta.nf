@@ -13,6 +13,7 @@ process BAKTA {
 
     output:
     tuple val(ID), path("${ID}.gff3"), emit: bakta_out
+    tuple val('bakta'), eval("bakta --version | cut -d ' ' -f 2"), topic: versions
 
     script:
     """

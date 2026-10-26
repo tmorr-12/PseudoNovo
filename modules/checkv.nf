@@ -12,6 +12,7 @@ process CHECKV {
 
     output:
     path("${ID}_checkv_summary.tsv"), emit: checkv_summary
+    tuple val("checkv"), eval("checkv --version | cut -d ' ' -f 3"), topic: versions
 
     script:
     """

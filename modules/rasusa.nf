@@ -10,6 +10,7 @@ process RASUSA {
 
     output:
     tuple val(ID), path("${ID}_rasusa.fastq", arity: '1'), val(genome_size), emit: downsampled_reads
+    tuple val('rasusa'), eval('rasusa --version | sed -e "s/rasusa //g"'), topic: versions
 
     script:
     def size = params.target_genome_size ?: genome_size

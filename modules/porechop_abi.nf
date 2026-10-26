@@ -9,6 +9,7 @@ process PORECHOP_ABI {
 
     output:
     tuple val(ID), path("${ID}_trimmed.fastq", arity: '1'), val(size), emit: trimmed_fastq
+    tuple val('porechop_abi'), eval("porechop_abi --version"), topic: versions
     
     script:
     def long_fastq="${reads[0]}"

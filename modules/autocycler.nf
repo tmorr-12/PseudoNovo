@@ -13,6 +13,7 @@ process AUTOCYCLER {
     output:
     tuple val(ID), path(reads), path("${ID}_consensus.fa"), emit: fasta_ch
     tuple val(ID), path("${ID}_consensus.yaml"), emit: yaml_ch
+    tuple val("autocycler"), eval("autocycler --version |  sed 's/^[^ ]* //'"), topic: versions
 
     script:
     def command = "${projectDir}/bin/run_autocycler.sh"

@@ -23,15 +23,17 @@ workflow ASSEMBLY {
     if (params.mode == "short") {
         UNICYCLER_SHORT(assembly_ch)
         qc_ch = UNICYCLER_SHORT.out.fasta_ch
+
     } else if (params.mode == "long") {
         AUTOCYCLER(assembly_ch)
         MEDAKA(AUTOCYCLER.out.fasta_ch)
         qc_ch = MEDAKA.out.polished_ch
+
     } else if (params.mode == "hybrid") {
         AUTOCYCLER(assembly_ch)
         BWA_POLYPOLISH(AUTOCYCLER.out.fasta_ch)
-        | POLYPOLISH
-        | PYPOLCA
+        POLYPOLISH(BWA_POLYPOLISH.out.sam_out)
+        PYPOLCA(POLYPOLISH.out.polished_ch)
         qc_ch = PYPOLCA.out.hybrid_ch
     }
     

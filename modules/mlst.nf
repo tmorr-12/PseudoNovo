@@ -12,6 +12,7 @@ process MLST {
 
     output:
     tuple val(ID), path("${ID}_mlst.tsv"), emit: mlst_out
+    tuple val('mlst'), eval('mlst --version | sed "s/mlst //"'), topic: versions
 
     script:
     """

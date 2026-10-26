@@ -32,4 +32,13 @@ workflow {
     ASSEMBLY(assembly_ch)
     | ANNOTATION
 
+    channel.topic('versions')
+        .unique()
+        .map { tool, version -> "${tool}\t${version}" }
+        .collectFile(
+            storeDir: "${params.outdir}/pipeline-info",
+            name: 'software_versions.tsv',
+            newLine: true,
+            sort: true
+        )
 }

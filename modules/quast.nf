@@ -12,6 +12,7 @@ process QUAST {
 
     output:
     tuple val(ID), path("${ID}_quast_report.tsv"), emit: quast_out
+    tuple val('quast'), eval('quast.py --version | grep "QUAST" | sed \'s/^.*QUAST v//; s/ .*\$//\''), topic: versions
 
     script:
     def quast_report = "${ID}_quast_report.tsv"

@@ -13,6 +13,7 @@ process DEFENSE_FINDER {
 
     output:
     path("${ID}*_defense_finder_genes.tsv"), emit: genes
+    tuple val('defense-finder'), eval("defense-finder version | cut -d ' ' -f 4"), topic: versions
     
     script:
     """

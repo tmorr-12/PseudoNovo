@@ -12,6 +12,7 @@ process FASTQC {
     output:
     tuple val(ID), path("${ID}_R1_summary.txt"), emit: r1_summary
     tuple val(ID), path("${ID}_R2_summary.txt"), emit: r2_summary
+    tuple val('fastqc'), eval('fastqc --version | sed "/FastQC v/!d; s/.*v//"'), topic: versions
 
     script:
     def R1="${reads[0]}"
