@@ -19,4 +19,9 @@ process BAKTA {
     bakta ${contigs} --db ${bakta_db} --output annotation/ --prefix ${ID} --threads ${task.cpus}
     mv annotation/${ID}*.gff3 ${ID}.gff3
     """
+
+    stub:
+    """
+    touch ${ID}.gff3
+    """
 }

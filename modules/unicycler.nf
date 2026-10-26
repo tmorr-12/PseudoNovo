@@ -29,4 +29,9 @@ process UNICYCLER_SHORT {
 
     mv unicycler_output/assembly.fasta "${ID}_contigs.fa"
     """
+
+    stub:
+    """
+    touch ${ID}_contigs.fa
+    """
 }

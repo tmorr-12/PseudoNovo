@@ -17,6 +17,11 @@ process NANOPLOT {
     """
     NanoPlot --fastq ${long_fastq} --N50 -p ${ID}_${stage} --threads ${task.cpus}
     """
+
+    stub:
+    """
+    touch ${ID}_${stage}.txt
+    """
 }
 
 process COMPARE_NANOPLOT {
@@ -35,5 +40,10 @@ process COMPARE_NANOPLOT {
     def command = "${projectDir}/bin/compare_nanoplot.py"
     """
     ${command} ${ID} ${pre_report} ${post_report}
+    """
+
+    stub:
+    """
+    touch ${ID}_NanoStats_Summary.tsv
     """
 }

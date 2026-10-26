@@ -17,4 +17,9 @@ process MLST {
     """
     mlst --full ${contigs} > ${ID}_mlst.tsv
     """
+
+    stub:
+    """
+    touch ${ID}_mlst.tsv
+    """
 }

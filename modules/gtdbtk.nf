@@ -25,4 +25,9 @@ process GTDBTK {
 
     mv gtdbtk_outdir/classify/gtdbtk.bac*.summary.tsv ${ID}_gtdbtk.tsv
     """
+
+    stub:
+    """
+    touch ${ID}_gtdbtk.tsv
+    """
 }

@@ -19,4 +19,9 @@ process QUAST {
     quast.py ${fasta} -o quast --no-html --no-plots
     mv quast/transposed_report.tsv ${quast_report}
     """
+
+    stub:
+    """
+    touch ${ID}_quast_report.tsv
+    """
 }

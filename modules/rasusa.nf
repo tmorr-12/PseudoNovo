@@ -22,4 +22,9 @@ process RASUSA {
         ${long_fastq} \
     > ${ID}_rasusa.fastq
     """
+
+    stub:
+    """
+    touch ${ID}_rasusa.fastq
+    """
 }

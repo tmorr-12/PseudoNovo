@@ -28,4 +28,10 @@ process GENOMAD {
     mv genomad_out/${ID}_contigs_summary/${ID}_contigs_virus.fna ${ID}_virus.fna
     mv genomad_out/${ID}_contigs_summary/${ID}_contigs_virus_genes.tsv ${ID}_virus_genes.tsv
     """
+
+    stub:
+    """
+    touch ${ID}_virus.fna
+    touch ${ID}_virus_genes.tsv
+    """
 }

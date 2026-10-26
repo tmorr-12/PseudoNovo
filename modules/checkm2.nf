@@ -19,4 +19,9 @@ process CHECKM2 {
     checkm2 predict --input ${fasta} --output-directory checkm2 --threads ${task.cpus} -x .fa --database_path ${checkm2_db}
     mv checkm2/quality_report.tsv ${ID}_checkm2.tsv
     """
+
+    stub:
+    """
+    touch ${ID}_checkm2.tsv
+    """
 }

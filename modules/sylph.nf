@@ -29,6 +29,14 @@ process SYLPH_SKETCH {
         sylph sketch -t ${task.cpus} -d ${ID}_sketch ${long_fastq}
         """
     }
+
+    stub:
+    def n = reads.size()
+    MODE = (n == 2) ? "short" : "long"
+    """
+    mkdir ${ID}_sketch
+    touch ${ID}_sketch/${ID}.sylsp
+    """
 }
 
 process SYLPH_PROFILE {
@@ -51,5 +59,10 @@ process SYLPH_PROFILE {
     script:
     """
     sylph profile -t ${task.cpus} ${sylph_db} ${sylph_sketch} > ${ID}_${MODE}_profile.tsv
+    """
+
+    stub:
+    """
+    touch ${ID}_${MODE}_profile.tsv
     """
 }

@@ -21,4 +21,9 @@ process DEFENSE_FINDER {
         -w ${task.cpus} \\
         ${contigs}
     """
+
+    stub:
+    """
+    touch ${ID}_defense_finder_genes.tsv
+    """
 }

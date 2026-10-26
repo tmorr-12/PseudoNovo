@@ -21,4 +21,9 @@ process CHOPPER {
         -i ${long_fastq} \
     > ${ID}_chopper.fastq
     """
+
+    stub:
+    """
+    touch ${ID}_chopper.fastq
+    """
 }

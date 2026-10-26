@@ -23,4 +23,9 @@ process MEDAKA {
         -t ${task.cpus}
     mv medaka_out/consensus.fasta ${ID}_polished.fasta
     """
+
+    stub:
+    """
+    touch ${ID}_polished.fasta
+    """
 }

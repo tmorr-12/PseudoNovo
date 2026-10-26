@@ -30,4 +30,9 @@ process PYPOLCA {
 
     mv pypolca_out/${ID}_corrected.fasta ${ID}_hybrid.fasta
     """
+
+    stub:
+    """
+    touch ${ID}_hybrid.fasta
+    """
 }

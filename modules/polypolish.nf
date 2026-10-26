@@ -19,6 +19,12 @@ process BWA_POLYPOLISH {
     bwa-mem2 mem -t ${task.cpus} -a ${fasta} ${R1} > ${ID}_1.sam
     bwa-mem2 mem -t ${task.cpus} -a ${fasta} ${R2} > ${ID}_2.sam
     """
+
+    stub:
+    """
+    touch ${ID}_1.sam
+    touch ${ID}_2.sam
+    """
 }
 
 process POLYPOLISH {
@@ -44,5 +50,10 @@ process POLYPOLISH {
 
     polypolish polish ${fasta} filtered_1.sam filtered_2.sam > ${ID}_polished.fasta
     rm *.amb *.ann *.bwt *.pac *.sa *.sam
+    """
+
+    stub:
+    """
+    touch ${ID}_polished.fasta
     """
 }

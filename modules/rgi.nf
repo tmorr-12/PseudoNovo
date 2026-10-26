@@ -26,4 +26,9 @@ process RGI {
         -n ${task.cpus} \\
         --clean
     """
+
+    stub:
+    """
+    touch ${ID}.txt
+    """
 }

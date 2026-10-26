@@ -25,4 +25,10 @@ process FASTQC {
     mv ${ID}_R1_fastqc/summary.txt ${ID}_R1_summary.txt
     mv ${ID}_R2_fastqc/summary.txt ${ID}_R2_summary.txt
     """
+
+    stub:
+    """
+    touch ${ID}_R1_summary.txt
+    touch ${ID}_R2_summary.txt
+    """
 }

@@ -22,4 +22,9 @@ process CHECKV {
 
     mv checkv_out/quality_summary.tsv ${ID}_checkv_summary.tsv
     """
+
+    stub:
+    """
+    touch ${ID}_checkv_summary.tsv
+    """
 }

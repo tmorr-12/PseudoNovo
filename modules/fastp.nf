@@ -31,4 +31,11 @@ process FASTP {
         --json ${ID}.json \
         -j ${ID}.json
     """
+
+    stub:
+    """
+    touch ${ID}_{1,2}_fastp.fastq
+    touch ${ID}.json
+    touch ${ID}_failed.fastq
+    """
 }

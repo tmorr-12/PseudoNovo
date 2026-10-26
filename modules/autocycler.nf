@@ -3,7 +3,7 @@ process AUTOCYCLER {
     tag "${ID}"
     label "huge"
 
-    publishDir "${params.outdir}/00-INTERMEDIATES/autocycler", pattern: "*.yaml"
+    publishDir "${params.outdir}/00-INTERMEDIATES/autocycler"
 
     container "ghcr.io/tmorr-12/autocycler:0.7.0_v4"
 
@@ -27,5 +27,11 @@ process AUTOCYCLER {
 
     mv autocycler_out/consensus_assembly.fasta ${ID}_consensus.fa
     mv autocycler_out/consensus_assembly.yaml ${ID}_consensus.yaml
+    """
+
+    stub:
+    """
+    touch ${ID}_consensus.fa
+    touch ${ID}_consensus.yaml
     """
 }

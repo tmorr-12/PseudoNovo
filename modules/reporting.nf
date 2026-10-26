@@ -42,6 +42,12 @@ process COLLECT_FASTQ_REPORTS {
     """
     ${command} ${args.join(' ')}
     """
+
+    stub:
+    """
+    touch ${ID}_${params.mode}_fq_report.tsv
+    echo PASS
+    """
 }
 
 process COLLECT_ASSEMBLY_REPORTS {
@@ -71,6 +77,12 @@ process COLLECT_ASSEMBLY_REPORTS {
         --gc ${params.target_gc_content} \
         --gtdb_classification "${params.gtdb_classification}"
     """
+
+    stub:
+    """
+    touch ${ID}_report.tsv
+    echo PASS
+    """
 }
 
 process MERGE_REPORTS{
@@ -85,11 +97,16 @@ process MERGE_REPORTS{
     val name
 
     output:
-    path("*.tsv")
+    path("${name}.tsv")
 
     script:
     def command="${projectDir}/bin/merge_reports.py"
     """
     ${command} --reports ${reports} --name ${name}
+    """
+
+    stub:
+    """
+    touch ${name}.tsv
     """
 }

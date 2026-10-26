@@ -25,11 +25,11 @@ workflow ASSEMBLY {
         qc_ch = UNICYCLER_SHORT.out.fasta_ch
     } else if (params.mode == "long") {
         AUTOCYCLER(assembly_ch)
-        | MEDAKA
+        MEDAKA(AUTOCYCLER.out.fasta_ch)
         qc_ch = MEDAKA.out.polished_ch
     } else if (params.mode == "hybrid") {
         AUTOCYCLER(assembly_ch)
-        | BWA_POLYPOLISH
+        BWA_POLYPOLISH(AUTOCYCLER.out.fasta_ch)
         | POLYPOLISH
         | PYPOLCA
         qc_ch = PYPOLCA.out.hybrid_ch
@@ -65,7 +65,7 @@ workflow ASSEMBLY {
     COLLECT_ASSEMBLY_REPORTS(report_ch)
 
     merge_ch = COLLECT_ASSEMBLY_REPORTS.out.report.collect()
-    MERGE_REPORTS(merge_ch, "assembly-report")
+    MERGE_REPORTS(merge_ch, "assembly_report")
 
     COLLECT_ASSEMBLY_REPORTS.out.contigs
         | filter { it -> it[2].trim() == 'PASS' }
