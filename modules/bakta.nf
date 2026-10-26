@@ -12,7 +12,7 @@ process BAKTA {
     path bakta_db
 
     output:
-    path("${ID}.gff3"), emit: bakta_out
+    tuple val(ID), path("${ID}.gff3"), emit: bakta_out
 
     script:
     """

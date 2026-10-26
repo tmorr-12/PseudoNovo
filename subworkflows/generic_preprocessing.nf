@@ -28,7 +28,7 @@ workflow CREATE_FASTQ_REPORT {
 
     take:
     report_in_ch
-    mode
+    name
 
     main:
     COLLECT_FASTQ_REPORTS(report_in_ch)
@@ -39,7 +39,7 @@ workflow CREATE_FASTQ_REPORT {
     | set { out_ch }
 
     merge_ch = COLLECT_FASTQ_REPORTS.out.report.collect()
-    MERGE_REPORTS(merge_ch, mode)
+    MERGE_REPORTS(merge_ch, name)
 
     emit: out_ch
     

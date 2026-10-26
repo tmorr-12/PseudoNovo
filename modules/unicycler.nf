@@ -1,7 +1,7 @@
 process UNICYCLER_SHORT {
     // https://github.com/rrwick/unicycler
     tag "${ID}"
-    label 'medium'
+    label 'large'
 
     container 'quay.io/biocontainers/unicycler:0.5.1--py312hdcc493e_5'
 

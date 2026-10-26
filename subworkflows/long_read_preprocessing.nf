@@ -49,7 +49,7 @@ workflow LONG_READ_PREPROCESSING {
             tuple(ID, reads, size, [], [], [], tsv, stats)
         }
 
-    CREATE_FASTQ_REPORT(report_in_ch, "long")
+    CREATE_FASTQ_REPORT(report_in_ch, "long_read_qc_report")
     long_out_ch = CREATE_FASTQ_REPORT.out.out_ch
 
     emit:

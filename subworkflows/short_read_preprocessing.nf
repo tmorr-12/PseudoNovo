@@ -32,7 +32,7 @@ workflow SHORT_READ_PREPROCESSING {
             tuple(ID, reads, size, fq_r1, fq_r2, json, tsv, [])
         }
 
-    CREATE_FASTQ_REPORT(report_in_ch, "short")
+    CREATE_FASTQ_REPORT(report_in_ch, "short_read_qc_report")
     short_out_ch = CREATE_FASTQ_REPORT.out.out_ch
 
     emit:

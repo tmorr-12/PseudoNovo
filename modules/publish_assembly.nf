@@ -2,7 +2,7 @@ process PUBLISH_ASSEMBLY {
     tag "${ID}"
     label 'minimal'
 
-    publishDir "${params.outdir}/01_ASSEMBLIES"
+    publishDir "${params.outdir}/01-ASSEMBLIES"
 
     input:
     tuple val(ID), path(fasta)

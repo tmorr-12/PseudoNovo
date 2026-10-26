@@ -93,9 +93,7 @@ def parseSize(row) {
 }
 
 def setInputChannel() {
-    def rows = channel
-        .fromPath(params.input)
-        .splitCsv(header: true)
+    def rows = channel.fromPath(params.input).splitCsv(header: true)
 
     if (params.mode == 'short') {
         return rows.map { row ->
