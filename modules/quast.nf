@@ -25,5 +25,7 @@ process QUAST {
     stub:
     """
     touch ${ID}_quast_report.tsv
+    mkdir ${ID}_quast
+    touch ${ID}_quast/${ID}_report_multiqc.tsv
     """
 }

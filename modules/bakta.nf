@@ -30,5 +30,6 @@ process BAKTA {
     stub:
     """
     touch ${ID}.gff3
+    touch ${ID}.txt
     """
 }

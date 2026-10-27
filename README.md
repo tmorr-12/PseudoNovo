@@ -37,8 +37,8 @@ There are 3 main workflows: **Preprocessing**, **Assembly** and **Annotation**:
 
 **Assembly:**
 
-1. Short reads are assembled using [Unicycler](https://github.com/rrwick/unicycler), long reads are assembled using [Autocycler](https://github.com/rrwick/Autocycler) and polished using [Medaka](https://github.com/nanoporetech/medaka). Hybrid reads are also assembled using [Autocycler](https://github.com/rrwick/Autocycler), before polishing with [Polypolish](https://github.com/rrwick/Polypolish) and [Pypolca](https://github.com/gbouras13/pypolca)
-2. Assembly QC is performed using [Quast](https://github.com/ablab/quast), [CheckM2](https://github.com/chklovski/CheckM2) and [GTDB-Tk](https://github.com/ecogenomics/gtdbtk). Assemblies are sequenced typed with [MLST](https://github.com/tseemann/mlst).
+1. Short reads are assembled using [Unicycler](https://github.com/rrwick/unicycler) (or [Shovill](https://github.com/tseemann/shovill)), long reads are assembled using [Autocycler](https://github.com/rrwick/Autocycler) (or [Flye](https://github.com/mikolmogorov/Flye)) and polished using [Medaka](https://github.com/nanoporetech/medaka). Hybrid reads are also assembled using [Autocycler](https://github.com/rrwick/Autocycler), before polishing with [Polypolish](https://github.com/rrwick/Polypolish) and [Pypolca](https://github.com/gbouras13/pypolca)
+2. Assembly QC is performed using [Quast](https://github.com/ablab/quast), [CheckM2](https://github.com/chklovski/CheckM2) and [GTDB-Tk](https://github.com/ecogenomics/gtdbtk). Assemblies are sequenced typed with [MLST](https://github.com/tseemann/mlst) and assigned to clusters with [PopPUNK](https://github.com/bacpop/PopPUNK).
 3. An assembly summary report is compiled and saved to the results directory.
 
 
@@ -47,9 +47,8 @@ There are 3 main workflows: **Preprocessing**, **Assembly** and **Annotation**:
 1. Reads are annotated using [Bakta](https://github.com/oschwengers/bakta).
 2. Plasmids are screened with [Abricate](https://github.com/tseemann/abricate) and the PlasmidFinder database.
 3. AMR resistance genes are screened using [RGI](https://github.com/arpcard/rgi) and the CARD database.
-4. Prophages are identified with [geNomad](https://github.com/apcamargo/genomad) and quality of identified viral elements are assessed with [CheckV](https://bitbucket.org/berkeleylab/CheckV/src/master/).
+4. Prophages are identified with [geNomad](https://github.com/apcamargo/genomad) and the quality of identified viral elements are assessed with [CheckV](https://bitbucket.org/berkeleylab/CheckV/src/master/).
 5. Anti-phage defense systems are screened using [DefenseFinder](https://github.com/mdmparis/defense-finder).
-6. Biosynthetic gene clusters are identified with [GECCO](https://github.com/zellerlab/GECCO).
 
 ## Quality Control
 
@@ -64,9 +63,9 @@ In the above example, SampleA passed all FASTQ QC filters, whereas SampleB faile
 
 The assembly qc report is as such:
 
-| ID | classification | N50 | Total length | # contigs | # contigs (>= 1000 bp) | Completeness | Contamination | GC_Content | Total_Coding_Sequences | Max_Contig_Length | SCHEME | ST | ALLELES | QC Status | QC Failed Fields |
+| ID | classification | N50 | Total length | # contigs | # contigs (>= 1000 bp) | Completeness | Contamination | GC_Content | Total_Coding_Sequences | Max_Contig_Length | Cluster | ST | ALLELES | QC Status | QC Failed Fields |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Sample ID | GTDBTk classification | Quast N50 | total assembly length | no. contigs | no. contigs about 1000bp | CheckM2 completeness | CheckM2 contamination | genome GC content | total CDS | size of largest contig | MLST scheme name | sequence type | MLST alleles | PASS / FAIL | comma separated list of failed fields (if QC Status == "FAIL") |
+| Sample ID | GTDBTk classification | Quast N50 | total assembly length | no. contigs | no. contigs about 1000bp | CheckM2 completeness | CheckM2 contamination | genome GC content | total CDS | size of largest contig | PopPUNK cluster | sequence type | MLST alleles | PASS / FAIL | comma separated list of failed fields (if QC Status == "FAIL") |
 
 
 ### Short Read QC
@@ -117,13 +116,15 @@ Main:
     --help                              Show this help message and exit
 
 Assembly:
-    --short_assembler                   Options: unicycler, shovill
+    --short_assembler                   Options: unicycler, shovill (default: unicycler)
+    --long_assembler                    Options: autocycler, flye (default: autocycler)
 
 Databases:
     --sylph_db                          Path to sylph database (e.g. /path/to/.sylphdb)
     --checkm2_db                        Path to checkm2 database (e.g. /path/to/.dmnd)
     --bakta_db                          Path to bakta database (e.g. /path/to/database)
     --card_db                           Path to card database (e.g. /path/to/card)
+    --poppunk_db                        Path to poppunk database (e.g. /path/to/pa_v1_refs)
     --gtdb                              Path to genome taxonomy database (e.g. /path/to/release232)
     --genomad_db                        Path to genomad database (e.g. /path/to/genomad_db)
     --checkv_db                         Path to checkv database (e.g. /path/to/checkv-db-v1.5)

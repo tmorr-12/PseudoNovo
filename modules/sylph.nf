@@ -68,3 +68,21 @@ process SYLPH_PROFILE {
     touch ${ID}_${MODE}_profile.tsv
     """
 }
+
+process SYLPH_DB_DOWNLOAD {
+    // https://sylph-docs.github.io/pre%E2%80%90built-databases/
+    tag "GTDB_r232"
+
+    output:
+    path("gtdb-r232-c200-dbv2.syl2db"), emit: sylph_db
+
+    script:
+    """
+    wget http://faust.compbio.cs.cmu.edu/sylph-stuff/gtdb-r232-c200-dbv2.syl2db
+    """
+
+    stub:
+    """
+    touch gtdb-r232-c200-dbv2.syl2db
+    """
+}

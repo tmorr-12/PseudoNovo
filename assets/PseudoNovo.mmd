@@ -1,7 +1,7 @@
 %%metro title: PseudoNovo
-%%metro stroke_scale: 1
+%%metro stroke_scale: 1.4
 %%metro compact_offsets: true
-%%metro font_scale: 1
+%%metro font_scale: 1.5
 %%metro track_gap: 2.5
 %%metro mode: dark
 %%metro style: nfcore
@@ -22,9 +22,9 @@ graph LR
         fastp -->|short| fastqc
         fastqc -->|short| sylph_sh
 
-        porechop_abi([Chopper])
+        porechop_abi([Porechop_ABI / Chopper])
         sylph_lg([Sylph])
-        nanoplot([Nanoplot])
+        nanoplot([Nanoplot / Rasusa])
 
         long_reads_in -->|long| porechop_abi
         porechop_abi -->|long| sylph_lg
@@ -32,13 +32,13 @@ graph LR
     end
     subgraph assembly [Assembly*]
         %% Short read assembly
-        unicycler([Unicycler])
+        unicycler([Unicycler / Shovill])
         _test([test])
         
         unicycler -->|short| _test
         
         %% Long read assembly
-        autocycler([Autocycler])
+        autocycler([Autocycler / Flye])
         medaka([Medaka])
 
         autocycler -->|long| medaka
@@ -54,6 +54,7 @@ graph LR
     	quast([Quast])
         checkm2([CheckM2])
         mlst([mlst])
+        poppunk([PopPUNK])
         gtdbtk([GTDB-Tk])
 	end
     subgraph annotation[Annotation]
@@ -71,39 +72,47 @@ graph LR
     _test -->|short| quast
     _test -->|short| checkm2
     _test -->|short| mlst
+    _test -->|short| poppunk
     _test -->|short| gtdbtk
     
     pypolca -->|hybrid| quast
     pypolca -->|hybrid| checkm2
     pypolca -->|hybrid| mlst
+    pypolca -->|hybrid| poppunk
     pypolca -->|hybrid| gtdbtk
     
     medaka -->|long| quast
     medaka -->|long| checkm2
     medaka -->|long| mlst
+    medaka -->|long| poppunk
     medaka -->|long| gtdbtk
     
     quast -->|short,hybrid,long| bakta
     checkm2 -->|short,hybrid,long| bakta
     mlst -->|short,hybrid,long| bakta
+    poppunk -->|short,hybrid,long| bakta
     gtdbtk -->|short,hybrid,long| bakta
     
     quast -->|short,hybrid,long| abricate
     checkm2 -->|short,hybrid,long| abricate
     mlst -->|short,hybrid,long| abricate
+    poppunk -->|short,hybrid,long| abricate
     gtdbtk -->|short,hybrid,long| abricate
     
     quast -->|short,hybrid,long| rgi
     checkm2 -->|short,hybrid,long| rgi
     mlst -->|short,hybrid,long| rgi
+	poppunk -->|short,hybrid,long| rgi
     gtdbtk -->|short,hybrid,long| rgi
 
 	quast -->|short,hybrid,long| genomad
     checkm2 -->|short,hybrid,long| genomad
     mlst -->|short,hybrid,long| genomad
+    poppunk -->|short,hybrid,long| genomad
     gtdbtk -->|short,hybrid,long| genomad
     
     quast -->|short,hybrid,long| defensefinder
     checkm2 -->|short,hybrid,long| defensefinder
     mlst -->|short,hybrid,long| defensefinder
+    poppunk -->|short,hybrid,long| defensefinder
     gtdbtk -->|short,hybrid,long| defensefinder

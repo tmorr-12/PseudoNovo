@@ -3,6 +3,7 @@
 include { UNICYCLER_SHORT } from '../modules/unicycler.nf'
 include { SHOVILL } from '../modules/shovill.nf'
 include { AUTOCYCLER } from '../modules/autocycler.nf'
+include { FLYE } from '../modules/flye.nf'
 include { MEDAKA } from '../modules/medaka.nf'
 include { BWA_POLYPOLISH
           POLYPOLISH } from '../modules/polypolish.nf'
@@ -10,6 +11,8 @@ include { PYPOLCA } from '../modules/pypolca.nf'
 include { QUAST } from '../modules/quast.nf'
 include { CHECKM2 } from '../modules/checkm2.nf'
 include { MLST } from '../modules/mlst.nf'
+include { POPPUNK 
+          POPPUNK_DB_DOWNLOAD } from '../modules/poppunk.nf'
 include { GTDBTK } from '../modules/gtdbtk.nf'
 include { COLLECT_ASSEMBLY_REPORTS 
           MERGE_REPORTS } from '../modules/reporting.nf'
@@ -31,8 +34,14 @@ workflow ASSEMBLY {
         }
 
     } else if (params.mode == "long") {
-        AUTOCYCLER(assembly_ch)
-        MEDAKA(AUTOCYCLER.out.fasta_ch)
+            if (params.long_assembler == "autocycler") {
+                AUTOCYCLER(assembly_ch)
+                fasta_ch = AUTOCYCLER.out.fasta_ch
+            } else if (params.long_assembler == "flye") {
+                FLYE(assembly_ch)
+                fasta_ch = FLYE.out.fasta_ch
+            }
+        MEDAKA(fasta_ch)
         qc_ch = MEDAKA.out.polished_ch
 
     } else if (params.mode == "hybrid") {
@@ -48,6 +57,7 @@ workflow ASSEMBLY {
             quast: it
             checkm2: it
             mlst: it
+            poppunk: it
             gtdbtk: it
         }
         .set { split_ch }
@@ -59,11 +69,20 @@ workflow ASSEMBLY {
 
     MLST(split_ch.mlst)
 
+    if (params.poppunk_db) {
+        poppunk_db = Channel.value(file(params.poppunk_db, checkIfExists: true))
+    } else {
+        POPPUNK_DB_DOWNLOAD()
+        poppunk_db = POPPUNK_DB_DOWNLOAD.out.poppunk_db
+    }
+    POPPUNK(split_ch.poppunk, poppunk_db)
+
     GTDBTK(split_ch.gtdbtk)
 
     report_ch = qc_ch
         .join(QUAST.out.quast_out)
         .join(CHECKM2.out.checkm2_out)
+        .join(POPPUNK.out.poppunk_out)
         .join(MLST.out.mlst_out)
         .join(GTDBTK.out.gtdbtk_out)
         .map { it ->

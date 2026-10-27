@@ -1,7 +1,8 @@
 #!/usr/bin/env nextflow
 
 include { SYLPH_SKETCH 
-          SYLPH_PROFILE } from '../modules/sylph.nf'
+          SYLPH_PROFILE 
+          SYLPH_DB_DOWNLOAD } from '../modules/sylph.nf'
 include { COLLECT_FASTQ_REPORTS 
           MERGE_REPORTS } from '../modules/reporting.nf'
 
@@ -14,7 +15,13 @@ workflow DECONTAMINATION {
     SYLPH_SKETCH(preprocessed_ch)
 
     SYLPH_SKETCH.out.sylph_sketch.set { sylph_profile_ch }
-    sylph_db_ch = Channel.value(file(params.sylph_db, checkIfExists: true))
+
+    if (params.sylph_db) {
+        sylph_db_ch = Channel.value(file(params.sylph_db, checkIfExists: true))
+    } else {
+        SYLPH_DB_DOWNLOAD()
+        sylph_db_ch = SYLPH_DB_DOWNLOAD.out.sylph_db
+    }
 
     SYLPH_PROFILE(sylph_profile_ch, sylph_db_ch)
 
