@@ -11,8 +11,7 @@ include { PYPOLCA } from '../modules/pypolca.nf'
 include { QUAST } from '../modules/quast.nf'
 include { CHECKM2 } from '../modules/checkm2.nf'
 include { MLST } from '../modules/mlst.nf'
-include { POPPUNK 
-          POPPUNK_DB_DOWNLOAD } from '../modules/poppunk.nf'
+include { POPPUNK } from '../modules/poppunk.nf'
 include { GTDBTK } from '../modules/gtdbtk.nf'
 include { COLLECT_ASSEMBLY_REPORTS 
           MERGE_REPORTS } from '../modules/reporting.nf'
@@ -22,6 +21,9 @@ workflow ASSEMBLY {
 
     take:
     assembly_ch
+    checkm2_db_ch
+    poppunk_db_ch
+    gtdb_db_ch
 
     main:
     if (params.mode == "short") {
@@ -63,21 +65,10 @@ workflow ASSEMBLY {
         .set { split_ch }
 
     QUAST(split_ch.quast)
-
-    checkm2_db = Channel.value(file(params.checkm2_db, checkIfExists: true))
-    CHECKM2(split_ch.checkm2, checkm2_db)
-
+    CHECKM2(split_ch.checkm2, checkm2_db_ch)
     MLST(split_ch.mlst)
-
-    if (params.poppunk_db) {
-        poppunk_db = Channel.value(file(params.poppunk_db, checkIfExists: true))
-    } else {
-        POPPUNK_DB_DOWNLOAD()
-        poppunk_db = POPPUNK_DB_DOWNLOAD.out.poppunk_db
-    }
-    POPPUNK(split_ch.poppunk, poppunk_db)
-
-    GTDBTK(split_ch.gtdbtk)
+    POPPUNK(split_ch.poppunk, poppunk_db_ch)
+    GTDBTK(split_ch.gtdbtk, gtdb_db_ch)
 
     report_ch = qc_ch
         .join(QUAST.out.quast_out)

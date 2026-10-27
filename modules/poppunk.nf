@@ -39,6 +39,8 @@ process POPPUNK_DB_DOWNLOAD {
     // https://bacpop.org/poppunk-databases/
     tag "P_aer_v1_refs"
 
+    publishDir "${params.outdir}/databases"
+
     output:
     path("pa_v1_refs"), emit: poppunk_db
 

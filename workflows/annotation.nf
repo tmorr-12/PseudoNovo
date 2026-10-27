@@ -11,11 +11,12 @@ workflow ANNOTATION {
 
     take:
     contigs_ch
+    bakta_db_ch
+    card_db_ch
+    genomad_db_ch
+    checkv_db_ch
 
     main:
-    bakta_db_ch = Channel.value(file(params.bakta_db, checkIfExists: true))
-    card_db_ch = Channel.fromPath("${params.card_db}/*", checkIfExists: true).collect()
-    genomad_db_ch = Channel.value(file(params.genomad_db, checkIfExists: true))
     defensefinder_models = Channel.value(file(params.defensefinder_models, checkIfExists: true))
 
     contigs_ch
@@ -31,11 +32,9 @@ workflow ANNOTATION {
     BAKTA(split_ch.bakta, bakta_db_ch)
     ABRICATE(split_ch.abricate)
     RGI(split_ch.rgi, card_db_ch)
+    DEFENSE_FINDER(split_ch.defensefinder, defensefinder_models)
 
     GENOMAD(split_ch.genomad, genomad_db_ch)
-    checkv_input_ch = GENOMAD.out.genomad_fna_ch
-    CHECKV(checkv_input_ch)
-
-    DEFENSE_FINDER(split_ch.defensefinder, defensefinder_models)
+    CHECKV(GENOMAD.out.genomad_fna_ch, checkv_db_ch)
 
 }

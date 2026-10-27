@@ -27,3 +27,25 @@ process CHECKM2 {
     touch ${ID}_checkm2.tsv
     """
 }
+
+process CHECKM2_DB_DOWNLOAD {
+    // https://github.com/chklovski/CheckM2
+    tag "uniref100"
+
+    container "quay.io/biocontainers/checkm2:1.1.0--pyh7e72e81_1"
+
+    publishDir "${params.outdir}/databases"
+
+    output:
+    path("uniref100.KO.1.dmnd"), emit: checkm2_db
+
+    script:
+    """
+    checkm2 database --download --path .
+    """
+
+    stub:
+    """
+    touch uniref100.KO.1.dmnd
+    """
+}

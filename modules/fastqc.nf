@@ -30,7 +30,7 @@ process FASTQC {
 
     stub:
     """
-    touch ${ID}_R1_summary.txt
-    touch ${ID}_R2_summary.txt
+    touch ${ID}_R{1,2}_summary.txt
+    touch ${ID}_R{1,2}_fastqc.zip
     """
 }

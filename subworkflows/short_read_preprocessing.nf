@@ -12,6 +12,7 @@ workflow SHORT_READ_PREPROCESSING {
 
     take:
     input_ch
+    sylph_db_ch
 
     main:
     // still run fastp to assess depth, just don't take the trimmed reads
@@ -21,7 +22,7 @@ workflow SHORT_READ_PREPROCESSING {
 
     FASTQC(filter_ch)
     
-    DECONTAMINATION(filter_ch)
+    DECONTAMINATION(filter_ch, sylph_db_ch)
     
     report_in_ch = DECONTAMINATION.out.reads_out_ch
         .join(FASTQC.out.r1_summary)

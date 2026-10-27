@@ -33,3 +33,25 @@ process RGI {
     touch ${ID}.txt
     """
 }
+
+process CARD_DB_DOWNLOAD {
+    // https://github.com/arpcard/rgi/blob/master/docs/rgi_load.rst
+    tag "CARD"
+
+    publishDir "${params.outdir}/databases"
+
+    output:
+    path("card/*"), emit: card_db
+
+    script:
+    """
+    wget https://card.mcmaster.ca/latest/data
+    tar -xvf data ./card.json
+    """
+
+    stub:
+    """
+    mkdir card
+    touch card/card.json
+    """
+}

@@ -22,7 +22,16 @@ process BAKTA {
     mkdir tmp_home
     export HOME=\$PWD/tmp_home
 
-    bakta ${contigs} --db ${bakta_db} --output annotation/ --prefix ${ID} --threads ${task.cpus}
+    bakta \\
+        ${contigs} \\
+        --db ${bakta_db} \\
+        --prefix ${ID} \\
+        --threads ${task.cpus} \\
+        --genus Pseudomonas \\
+        --species aeruginosa \\
+        --compliant \\
+        --locus-tag ${params.locus_tag}
+
     mv annotation/${ID}*.gff3 ${ID}.gff3
     mv annotation/${ID}*.txt ${ID}.txt
     """
@@ -31,5 +40,32 @@ process BAKTA {
     """
     touch ${ID}.gff3
     touch ${ID}.txt
+    """
+}
+
+process BAKTA_DB_DOWNLOAD {
+    // https://github.com/oschwengers/bakta#database
+    tag "db"
+
+    container "quay.io/biocontainers/bakta:1.12.1--pyhdfd78af_0"
+
+    publishDir "${params.outdir}/databases"
+
+    output:
+    path("db*"), emit: bakta_db
+
+    script:
+    """
+    ## nf-core reccommended fix to fontconfig 'no writeable cache directory' issue
+    mkdir tmp_home
+    export HOME=\$PWD/tmp_home
+
+    bakta_db download
+    """
+
+    stub:
+    """
+    mkdir db
+    touch db/db.db
     """
 }

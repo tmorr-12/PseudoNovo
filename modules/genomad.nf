@@ -36,3 +36,26 @@ process GENOMAD {
     touch ${ID}_virus_genes.tsv
     """
 }
+
+process GENOMAD_DB_DOWNLOAD {
+    // https://github.com/apcamargo/genomad
+    tag "genomad_db"
+
+    container "quay.io/biocontainers/genomad:1.12.0--pyhdfd78af_0"
+
+    publishDir "${params.outdir}/databases"
+
+    output:
+    path("genomad_db"), emit: genomad_db
+
+    script:
+    """
+    genomad download-database .
+    """
+
+    stub:
+    """
+    mkdir genomad_db
+    touch genomad_db/genomad_db
+    """
+}
