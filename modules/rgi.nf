@@ -45,8 +45,11 @@ process CARD_DB_DOWNLOAD {
 
     script:
     """
-    wget https://card.mcmaster.ca/latest/data
-    tar -xvf data ./card.json
+    wget https://card.mcmaster.ca/download/0/broadstreet-v4.0.2.tar.bz2
+    tar -xvf broadstreet-v4.0.2.tar.bz2 
+    rm broadstreet-v4.0.2.tar.bz2 
+    mkdir card
+    mv *.* card
     """
 
     stub:

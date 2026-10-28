@@ -15,10 +15,9 @@ workflow ANNOTATION {
     card_db_ch
     genomad_db_ch
     checkv_db_ch
+    defensefinder_models_ch
 
     main:
-    defensefinder_models = Channel.value(file(params.defensefinder_models, checkIfExists: true))
-
     contigs_ch
         .multiMap { it ->
             bakta: it
@@ -32,7 +31,7 @@ workflow ANNOTATION {
     BAKTA(split_ch.bakta, bakta_db_ch)
     ABRICATE(split_ch.abricate)
     RGI(split_ch.rgi, card_db_ch)
-    DEFENSE_FINDER(split_ch.defensefinder, defensefinder_models)
+    DEFENSE_FINDER(split_ch.defensefinder, defensefinder_models_ch)
 
     GENOMAD(split_ch.genomad, genomad_db_ch)
     CHECKV(GENOMAD.out.genomad_fna_ch, checkv_db_ch)

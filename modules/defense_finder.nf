@@ -28,3 +28,26 @@ process DEFENSE_FINDER {
     touch ${ID}_defense_finder_genes.tsv
     """
 }
+
+process DEFENSE_FINDER_MODELS_DOWNLOAD {
+    // https://github.com/mdmparis/defense-finder
+    tag "defense-finder-models_3.1.0"
+
+    container "quay.io/biocontainers/defense-finder:3.0.0--pyhdfd78af_0"
+
+    output:
+    path("defense-finder-models"), emit: defense-finder-models
+
+    script:
+    """
+    mkdir -p defense-finder-models
+    defense-finder update --models-dir ./defense-finder-models
+    """
+
+    stub:
+    """
+    mkdir -p defense-finder-models
+    touch defense-finder-models/defense-finder-models
+    touch defense-finder-models/CasFinder
+    """
+}

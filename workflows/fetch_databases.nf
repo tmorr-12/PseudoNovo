@@ -8,6 +8,7 @@ include { BAKTA_DB_DOWNLOAD } from '../modules/bakta.nf'
 include { CARD_DB_DOWNLOAD } from '../modules/rgi.nf'
 include { GENOMAD_DB_DOWNLOAD } from '../modules/genomad.nf'
 include { CHECKV_DB_DOWNLOAD } from '../modules/checkv.nf'
+include { DEFENSE_FINDER_MODELS_DOWNLOAD } from '../models/defense_finder.nf'
 
 workflow FETCH_DATABASES {
 
@@ -36,6 +37,9 @@ workflow FETCH_DATABASES {
     if (!params.checkv_db) {
         CHECKV_DB_DOWNLOAD()
     }
+    if (!params.defensefinder_models) {
+        DEFENSE_FINDER_MODELS_DOWNLOAD()
+    }
 
     emit:
     sylph_db_ch = params.sylph_db ? Channel.value(file(params.sylph_db, checkIfExists: true)) : SYLPH_DB_DOWNLOAD.out.sylph_db
@@ -46,5 +50,6 @@ workflow FETCH_DATABASES {
     card_db_ch = params.card_db ? Channel.fromPath("${params.card_db}/*", checkIfExists: true).collect() : CARD_DB_DOWNLOAD.out.card_db
     genomad_db_ch = params.genomad_db ? Channel.value(file(params.genomad_db, checkIfExists: true)) : GENOMAD_DB_DOWNLOAD.out.genomad_db
     checkv_db_ch = params.checkv_db ? Channel.value(file(params.checkv_db, checkIfExists: true)) : CHECKV_DB_DOWNLOAD.out.checkv_db
+    defensefinder_models_ch = params.defensefinder_models ? Channel.value(file(params.defensefinder_models, checkIfExists: true)) : DEFENSE_FINDER_MODELS_DOWNLOAD.out.defense-finder-models
 
 }

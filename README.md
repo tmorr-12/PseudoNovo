@@ -8,11 +8,26 @@
 
 1. First ensure you have [Nextflow](https://docs.seqera.io/nextflow/install#installation) installed
 2. Next ensure you have either [Docker](https://docs.docker.com/engine/install/) or [Singularity](https://docs.sylabs.io/guides/3.0/user-guide/) installed
-3. Finally clone the repo with ``git clone https://github.com/tmorr-12/PseudoNovo``
+3. Clone the repo with ``git clone https://github.com/tmorr-12/PseudoNovo``
+4. Setup the required databases (see below)
 
-> **NOTE:** If your cluster already has the required databases, you can skip step 4 and simply provide the paths to the existing databases
+## Databases
 
-> **COMING SOON:** You are encouraged to provide paths to your own databases. However, if no databases are provided, the pipeline will automatically download them.
+**PseudoNovo** makes use of several databases. You can tell the pipeline which database to use either via the command line or by editing the `qc.config` file. If you do not provide a path to a specific database, the pipeline will automatically download it for you. Any downloaded databases are saved to the `results/databases` directory. Downloads take several hours; you are encouraged the move them somewhere safe so they can be reused.
+
+> **NOTE:** Most HPC's have a central database store. You are encouraged to use the paths issued by your local supplier.
+
+| Tool | Database | Info | Link |
+| --- | --- | --- | --- |
+| Sylph | gtdb-r232-c200-dbv2.syl2db | https://sylph-docs.github.io/pre%E2%80%90built-databases/ | http://faust.compbio.cs.cmu.edu/sylph-stuff/gtdb-r232-c200-dbv2.syl2db |
+| CheckM2 | uniref100.KO.1.dmnd | https://github.com/chklovski/CheckM2#database | https://zenodo.org/records/14897628/files/checkm2_database.tar.gz?download=1 |
+| PopPUNK | pa_v1_refs (v1)| https://bacpop.org/poppunk-databases/ | https://ftp.ebi.ac.uk/pub/databases/pp_dbs/Pseudomonas_aeruginosa_v1_refs.tar.bz2 |
+| GTDB-Tk | latest (r232) | https://gtdb.ecogenomic.org/ | https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_package/full_package/gtdbtk_data.tar.gz |
+| Bakta | db (6.0) | https://zenodo.org/records/14916843 | https://zenodo.org/records/14916843/files/db.tar.xz?download=1 |
+| RGI | latest (card 4.0.2) | https://card.mcmaster.ca/ | https://card.mcmaster.ca/download/0/broadstreet-v4.0.2.tar.bz2 |
+| geNomad | genomad_db (v1.9) | https://zenodo.org/records/14886553 | https://zenodo.org/records/14886553/files/genomad_db_v1.9.tar.gz?download=1 | 
+| CheckV | checkv-db-v1.5 | https://bitbucket.org/berkeleylab/CheckV/src/master/#markdown-header-checkv-database | https://portal.nersc.gov/CheckV/ |
+
 
 ## Usage
 Parameters can be passed via the command line or preferably by editing the 'qc.config' file located in this repo.
