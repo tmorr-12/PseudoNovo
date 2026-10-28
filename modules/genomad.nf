@@ -43,7 +43,7 @@ process GENOMAD_DB_DOWNLOAD {
 
     container "quay.io/biocontainers/genomad:1.12.0--pyhdfd78af_0"
 
-    publishDir "${params.outdir}/databases"
+    storeDir "${params.outdir}/databases"
 
     output:
     path("genomad_db"), emit: genomad_db

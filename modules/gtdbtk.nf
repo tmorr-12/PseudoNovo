@@ -40,7 +40,7 @@ process GTDB_DB_DOWNLOAD {
     // https://github.com/ecogenomics/gtdbtk
     tag "r232"
 
-    publishDir "${params.outdir}/databases"
+    storeDir "${params.outdir}/databases"
 
     output:
     path("release232"), emit: gtdb_db

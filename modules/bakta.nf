@@ -49,7 +49,7 @@ process BAKTA_DB_DOWNLOAD {
 
     container "quay.io/biocontainers/bakta:1.12.1--pyhdfd78af_0"
 
-    publishDir "${params.outdir}/databases"
+    storeDir "${params.outdir}/databases"
 
     output:
     path("db*"), emit: bakta_db

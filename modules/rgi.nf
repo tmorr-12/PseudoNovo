@@ -38,7 +38,7 @@ process CARD_DB_DOWNLOAD {
     // https://github.com/arpcard/rgi/blob/master/docs/rgi_load.rst
     tag "CARD"
 
-    publishDir "${params.outdir}/databases"
+    storeDir "${params.outdir}/databases"
 
     output:
     path("card/*"), emit: card_db

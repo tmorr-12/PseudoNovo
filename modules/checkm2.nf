@@ -9,7 +9,7 @@ process CHECKM2 {
 
     input:
     tuple val(ID), path(fasta)
-    path checkm2_db
+    path(checkm2_db)
 
     output:
     tuple val(ID), path("${ID}_checkm2.tsv"), emit: checkm2_out
@@ -32,16 +32,17 @@ process CHECKM2_DB_DOWNLOAD {
     // https://github.com/chklovski/CheckM2
     tag "uniref100"
 
-    container "quay.io/biocontainers/checkm2:1.1.0--pyh7e72e81_1"
-
-    publishDir "${params.outdir}/databases"
+    storeDir "${params.outdir}/databases"
 
     output:
     path("uniref100.KO.1.dmnd"), emit: checkm2_db
 
     script:
     """
-    checkm2 database --download --path .
+    wget -O CheckM2_database.tar.gz https://zenodo.org/records/14897628/files/checkm2_database.tar.gz?download=1
+    tar -xzf CheckM2_database.tar.gz
+    mv CheckM2_database/uniref100.KO.1.dmnd uniref100.KO.1.dmnd
+    rm CheckM2_database.tar.gz
     """
 
     stub:

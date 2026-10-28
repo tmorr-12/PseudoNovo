@@ -37,7 +37,7 @@ process CHECKV_DB_DOWNLOAD {
 
     container "quay.io/biocontainers/checkv:1.1.1--pyh106432d_1"
 
-    publishDir "${params.outdir}/databases"
+    storeDir "${params.outdir}/databases"
 
     output:
     path("checkv-db-v1.5"), emit: checkv_db
