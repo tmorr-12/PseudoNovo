@@ -90,7 +90,7 @@ The assembly qc report is as such:
 | fastqc_pass_criteria  | FASTQC pass criteria | "assets/fastqc_pass_criteria.json" |
 | lower_assembly_length | Lower bound for assembly length when assessing read depth with fastp | 5500000 |
 | min_contig_length     | Minimum contig length for assembly | 500 |
-| unicycler_mode        | Unicycler mode for short reads | "conservative" |
+| unicycler_mode        | Unicycler mode for short reads | "normal" |
 
 ### Long Read QC 
 
