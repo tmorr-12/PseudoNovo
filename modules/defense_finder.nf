@@ -36,7 +36,7 @@ process DEFENSE_FINDER_MODELS_DOWNLOAD {
     container "quay.io/biocontainers/defense-finder:3.0.0--pyhdfd78af_0"
 
     output:
-    path("defense-finder-models"), emit: defense-finder-models
+    path("defense-finder-models"), emit: defensefinder_models
 
     script:
     """
