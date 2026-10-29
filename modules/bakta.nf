@@ -17,11 +17,8 @@ process BAKTA {
     path "${ID}.txt", topic: multi_qc
 
     script:
+    def locus_tag = params.locus_tag ? "--locus-tag ${params.locus_tag}" : ""
     """
-    ## nf-core reccommended fix to fontconfig 'no writeable cache directory' issue
-    mkdir tmp_home
-    export HOME=\$PWD/tmp_home
-
     bakta \\
         ${contigs} \\
         --db ${bakta_db} \\
@@ -29,11 +26,8 @@ process BAKTA {
         --threads ${task.cpus} \\
         --genus Pseudomonas \\
         --species aeruginosa \\
-        --compliant \\
-        --locus-tag ${params.locus_tag}
-
-    mv annotation/${ID}*.gff3 ${ID}.gff3
-    mv annotation/${ID}*.txt ${ID}.txt
+        ${locus_tag} \\
+        --compliant
     """
 
     stub:
@@ -56,10 +50,6 @@ process BAKTA_DB_DOWNLOAD {
 
     script:
     """
-    ## nf-core reccommended fix to fontconfig 'no writeable cache directory' issue
-    mkdir tmp_home
-    export HOME=\$PWD/tmp_home
-
     bakta_db download
     """
 

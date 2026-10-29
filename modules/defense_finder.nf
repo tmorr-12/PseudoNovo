@@ -17,6 +17,8 @@ process DEFENSE_FINDER {
     
     script:
     """
+    export HOME=\$PWD
+
     defense-finder run \\
         --models-dir ${models} \\
         -w ${task.cpus} \\
@@ -35,13 +37,19 @@ process DEFENSE_FINDER_MODELS_DOWNLOAD {
 
     container "quay.io/biocontainers/defense-finder:3.0.0--pyhdfd78af_0"
 
+    storeDir "${params.outdir}/databases"
+
     output:
     path("defense-finder-models"), emit: defensefinder_models
 
     script:
     """
+    mkdir models
+    export HOME=\$PWD/models
+    defense-finder update
+
     mkdir -p defense-finder-models
-    defense-finder update --models-dir ./defense-finder-models
+    mv models/.macsyfinder/models/* defense-finder-models
     """
 
     stub:

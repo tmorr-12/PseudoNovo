@@ -1,6 +1,6 @@
 # PseudoNovo
 
-**PseudoNovo** is a specialised ***Pseudo***monas de-***Novo*** assembly pipeline written in Nextflow. It can handle short, long or hybrid read datasets and performs read QC, assembly, assembly QC and annotation.
+**PseudoNovo** is a specialised ***Pseudo***monas de-***Novo*** assembly pipeline written in Nextflow. It can handle short, long or hybrid read datasets and performs read QC, assembly, assembly QC and biologically relevant functional annotations.
 
 ![Alt text](assets/metro_map.png)
 
@@ -13,7 +13,7 @@
 
 ## Databases
 
-**PseudoNovo** makes use of several databases. You can tell the pipeline which database to use either via the command line or by editing the `qc.config` file. If you do not provide a path to a specific database, the pipeline will automatically download it for you. Any downloaded databases are saved to the `results/databases` directory. Downloads take several hours; you are encouraged the move them somewhere safe so they can be reused.
+**PseudoNovo** makes use of several databases. You can tell the pipeline which database to use either via the command line or by editing the `qc.config` file. If you do not provide a path to a specific database, the pipeline will automatically download it for you. Any downloaded databases are saved to the `results/databases` directory. Downloads take several hours, so the keep them somewhere safe so they can be reused.
 
 > **NOTE:** Most HPC's have a central database store. You are encouraged to use the paths issued by your local supplier.
 
@@ -37,7 +37,7 @@ nextflow run main.nf --input <path/to/manifest.csv> [options]
 ```
 
 ## Generating a manifest
-To generate a manifest see [Manifest-Generator](https://github.com/tmorr-12/Manifest-Generator)
+To generate a short, long or hybrid reads manifest, see [Manifest-Generator](https://github.com/tmorr-12/Manifest-Generator). 
 
 ## Workflow
 
@@ -64,6 +64,51 @@ There are 3 main workflows: **Preprocessing**, **Assembly** and **Annotation**:
 3. AMR resistance genes are screened using [RGI](https://github.com/arpcard/rgi) and the CARD database.
 4. Prophages are identified with [geNomad](https://github.com/apcamargo/genomad) and the quality of identified viral elements are assessed with [CheckV](https://bitbucket.org/berkeleylab/CheckV/src/master/).
 5. Anti-phage defense systems are screened using [DefenseFinder](https://github.com/mdmparis/defense-finder).
+
+## Output
+
+By default, a results directory is created wherever you launch the pipeline. 
+
+**00-INTERMEDIATES** holds any relevant out files produced during pipeline execution
+
+**01-ASSEMBLIES** holds all assembly files that pass QC
+
+**02-ANNOTATIONS** holds the output from all annotation processes (only assemblies passing QC are annotated)
+
+**databases** holds any downloaded databases (i.e. databases for which no path was given)
+
+**pipeline-info** holds the execution trace, pipeline DAG and versions.tsv file
+
+**[mode]_read_qc_report.tsv**, **assembly_report.tsv** and **multiqc_report.html** provide comprehensive summaries of all relevant pipeline outputs
+
+Example:
+
+```
+/results
+├── 00-INTERMEDIATES
+│   ├── tool_1
+│   ├── tool_2
+│   └── ...
+├── 01-ASSEMBLIES
+│   ├── test_1_contigs.fasta
+│   ├── test_2_contigs.fasta
+│   └── ...
+├── 02-ANNOTATIONS
+│   ├── abricate
+│   ├── bakta
+│   └── ...
+├── databases
+│   ├── checkv-db-v1.5
+│   ├── release232
+│   └── ...
+├── pipeline-info
+│   ├── execution_trace_20261028_114000.txt
+│   ├── pipeline_dag.mmd
+│   └── software_versions.tsv
+├── assembly_report.tsv
+├── short_read_qc_report.tsv 
+└── multiqc_report.html
+```
 
 ## Quality Control
 
