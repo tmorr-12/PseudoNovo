@@ -9,12 +9,12 @@ workflow DECONTAMINATION {
 
     take:
     preprocessed_ch
+    sylph_db_ch
 
     main:
     SYLPH_SKETCH(preprocessed_ch)
 
     SYLPH_SKETCH.out.sylph_sketch.set { sylph_profile_ch }
-    sylph_db_ch = Channel.value(file(params.sylph_db, checkIfExists: true))
 
     SYLPH_PROFILE(sylph_profile_ch, sylph_db_ch)
 

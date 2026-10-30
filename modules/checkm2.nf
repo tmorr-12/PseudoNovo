@@ -9,14 +9,44 @@ process CHECKM2 {
 
     input:
     tuple val(ID), path(fasta)
-    path checkm2_db
+    path(checkm2_db)
 
     output:
     tuple val(ID), path("${ID}_checkm2.tsv"), emit: checkm2_out
+    tuple val('checkm2'), eval('checkm2 --version'), topic: versions
+    path "${ID}_checkm2.tsv", topic: multi_qc
 
     script:
     """
     checkm2 predict --input ${fasta} --output-directory checkm2 --threads ${task.cpus} -x .fa --database_path ${checkm2_db}
     mv checkm2/quality_report.tsv ${ID}_checkm2.tsv
+    """
+
+    stub:
+    """
+    touch ${ID}_checkm2.tsv
+    """
+}
+
+process CHECKM2_DB_DOWNLOAD {
+    // https://github.com/chklovski/CheckM2
+    tag "uniref100"
+
+    storeDir "${params.outdir}/databases"
+
+    output:
+    path("uniref100.KO.1.dmnd"), emit: checkm2_db
+
+    script:
+    """
+    wget -O CheckM2_database.tar.gz https://zenodo.org/records/14897628/files/checkm2_database.tar.gz?download=1
+    tar -xzf CheckM2_database.tar.gz
+    mv CheckM2_database/uniref100.KO.1.dmnd uniref100.KO.1.dmnd
+    rm CheckM2_database.tar.gz
+    """
+
+    stub:
+    """
+    touch uniref100.KO.1.dmnd
     """
 }

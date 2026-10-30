@@ -12,9 +12,15 @@ process MLST {
 
     output:
     tuple val(ID), path("${ID}_mlst.tsv"), emit: mlst_out
+    tuple val('mlst'), eval('mlst --version | sed "s/mlst //"'), topic: versions
 
     script:
     """
     mlst --full ${contigs} > ${ID}_mlst.tsv
+    """
+
+    stub:
+    """
+    touch ${ID}_mlst.tsv
     """
 }

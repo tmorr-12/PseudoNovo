@@ -15,6 +15,8 @@ process FASTP {
     tuple val(ID), path("${ID}_{1,2}_fastp.fastq"), val(size), emit: fastp_out_ch
     tuple val(ID), path("${ID}.json"), emit: json
     path("${ID}_failed.fastq"), emit: failed_reads
+    tuple val('fastp'), eval('fastp --version | sed -e "s/fastp //g"'), topic: versions
+    path "${ID}.json", topic: multi_qc
 
     script:
     def R1="${reads[0]}"
@@ -30,5 +32,12 @@ process FASTP {
         --failed_out ${ID}_failed.fastq \
         --json ${ID}.json \
         -j ${ID}.json
+    """
+
+    stub:
+    """
+    touch ${ID}_{1,2}_fastp.fastq
+    touch ${ID}.json
+    touch ${ID}_failed.fastq
     """
 }

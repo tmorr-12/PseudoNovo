@@ -12,6 +12,8 @@ process FASTQC {
     output:
     tuple val(ID), path("${ID}_R1_summary.txt"), emit: r1_summary
     tuple val(ID), path("${ID}_R2_summary.txt"), emit: r2_summary
+    tuple val('fastqc'), eval('fastqc --version | sed "/FastQC v/!d; s/.*v//"'), topic: versions
+    path "${ID}_R{1,2}_fastqc.zip", topic: multi_qc
 
     script:
     def R1="${reads[0]}"
@@ -24,5 +26,11 @@ process FASTQC {
 
     mv ${ID}_R1_fastqc/summary.txt ${ID}_R1_summary.txt
     mv ${ID}_R2_fastqc/summary.txt ${ID}_R2_summary.txt
+    """
+
+    stub:
+    """
+    touch ${ID}_R{1,2}_summary.txt
+    touch ${ID}_R{1,2}_fastqc.zip
     """
 }

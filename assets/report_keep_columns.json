@@ -15,8 +15,13 @@
         "keep_columns": ["Name", "Completeness", "Contamination", "GC_Content", "Total_Coding_Sequences", "Max_Contig_Length"]
     },
     {
+        "tool": "poppunk",
+        "id_col": "Taxon",
+        "keep_columns": ["Cluster"]
+    },
+    {
         "tool": "mlst",
         "id_col": "FILE",
-        "keep_columns": ["FILE", "SCHEME", "ST", "ALLELES"]
+        "keep_columns": ["FILE", "ST", "ALLELES"]
     }
 ]

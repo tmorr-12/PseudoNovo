@@ -13,6 +13,7 @@ process RGI {
 
     output:
     path("${ID}.txt"), emit: rgi_out
+    tuple val('rgi'), eval("rgi main --version"), topic: versions
 
     script:
     """
@@ -25,5 +26,35 @@ process RGI {
         --alignment_tool DIAMOND \\
         -n ${task.cpus} \\
         --clean
+    """
+
+    stub:
+    """
+    touch ${ID}.txt
+    """
+}
+
+process CARD_DB_DOWNLOAD {
+    // https://github.com/arpcard/rgi/blob/master/docs/rgi_load.rst
+    tag "CARD"
+
+    storeDir "${params.outdir}/databases"
+
+    output:
+    path("card/*"), emit: card_db
+
+    script:
+    """
+    wget https://card.mcmaster.ca/download/0/broadstreet-v4.0.2.tar.bz2
+    tar -xvf broadstreet-v4.0.2.tar.bz2 
+    rm broadstreet-v4.0.2.tar.bz2 
+    mkdir card
+    mv *.* card
+    """
+
+    stub:
+    """
+    mkdir card
+    touch card/card.json
     """
 }

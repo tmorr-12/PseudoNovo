@@ -9,7 +9,8 @@ process BWA_POLYPOLISH {
     tuple val(ID), path(reads), path(fasta)
 
     output:
-    tuple val(ID), path(reads), path(fasta), path("${ID}_1.sam"), path("${ID}_2.sam")
+    tuple val(ID), path(reads), path(fasta), path("${ID}_1.sam"), path("${ID}_2.sam"), emit: sam_out
+    tuple val('bwamem2'), eval('bwa-mem2 version | grep -o -E "[0-9]+(\\.[0-9]+)+"'), topic: versions
 
     script:
     def R1="${reads[0]}"
@@ -18,6 +19,12 @@ process BWA_POLYPOLISH {
     bwa-mem2 index ${fasta}
     bwa-mem2 mem -t ${task.cpus} -a ${fasta} ${R1} > ${ID}_1.sam
     bwa-mem2 mem -t ${task.cpus} -a ${fasta} ${R2} > ${ID}_2.sam
+    """
+
+    stub:
+    """
+    touch ${ID}_1.sam
+    touch ${ID}_2.sam
     """
 }
 
@@ -33,6 +40,7 @@ process POLYPOLISH {
 
     output:
     tuple val(ID), path(reads), path("${ID}_polished.fasta"), emit: polished_ch
+    tuple val('polypolish'), eval("polypolish polish --version | sed '1!d;s/Polypolish-polish //'"), topic: versions
 
     script:
     """
@@ -44,5 +52,10 @@ process POLYPOLISH {
 
     polypolish polish ${fasta} filtered_1.sam filtered_2.sam > ${ID}_polished.fasta
     rm *.amb *.ann *.bwt *.pac *.sa *.sam
+    """
+
+    stub:
+    """
+    touch ${ID}_polished.fasta
     """
 }

@@ -11,11 +11,17 @@ process NANOPLOT {
 
     output:
     tuple val(ID), path("*.txt"), emit: nanostats
+    tuple val('NanoPlot'), eval('NanoPlot --version | sed \'s/^.*NanoPlot //; s/ .*\$//\''), topic: versions
 
     script:
     def long_fastq="${reads[0]}"
     """
     NanoPlot --fastq ${long_fastq} --N50 -p ${ID}_${stage} --threads ${task.cpus}
+    """
+
+    stub:
+    """
+    touch ${ID}_${stage}.txt
     """
 }
 
@@ -35,5 +41,10 @@ process COMPARE_NANOPLOT {
     def command = "${projectDir}/bin/compare_nanoplot.py"
     """
     ${command} ${ID} ${pre_report} ${post_report}
+    """
+
+    stub:
+    """
+    touch ${ID}_NanoStats_Summary.tsv
     """
 }

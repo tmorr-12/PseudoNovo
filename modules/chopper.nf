@@ -10,6 +10,7 @@ process CHOPPER {
 
     output:
     tuple val(ID), path("${ID}_chopper.fastq", arity: '1'), val(size), emit: chopper_out
+    tuple val('chopper'), eval("chopper --version | cut -d ' ' -f 2"), topic: versions
 
     script:
     def long_fastq="${reads[0]}"
@@ -20,5 +21,10 @@ process CHOPPER {
         -t ${task.cpus} \
         -i ${long_fastq} \
     > ${ID}_chopper.fastq
+    """
+
+    stub:
+    """
+    touch ${ID}_chopper.fastq
     """
 }

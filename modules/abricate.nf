@@ -11,10 +11,16 @@ process ABRICATE {
     tuple val(ID), path(contigs)
 
     output:
-    path("${ID}_*.tsv"), emit: abricate_out
+    path("${ID}_plasmidfinder.tsv"), emit: abricate_out
+    tuple val('abricate'), eval("abricate --version | sed 's/^.*abricate //'"), topic: versions
 
     script:
     """
     abricate --db plasmidfinder ${contigs} > ${ID}_plasmidfinder.tsv
+    """
+
+    stub:
+    """
+    touch ${ID}_plasmidfinder.tsv
     """
 }

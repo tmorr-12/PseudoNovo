@@ -12,6 +12,7 @@ process UNICYCLER_SHORT {
 
     output:
     tuple val(ID), path("${ID}_contigs.fa"), emit: fasta_ch
+    tuple val('unicycler'), eval('TERM=xterm unicycler --version | sed "s/^.*Unicycler v//; s/ .*$//"'), topic: versions
 
     script:
     def R1="${reads[0]}"
@@ -28,5 +29,10 @@ process UNICYCLER_SHORT {
         --mode ${params.unicycler_mode}
 
     mv unicycler_output/assembly.fasta "${ID}_contigs.fa"
+    """
+
+    stub:
+    """
+    touch ${ID}_contigs.fa
     """
 }

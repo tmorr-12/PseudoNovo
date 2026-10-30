@@ -10,6 +10,7 @@ process SYLPH_SKETCH {
 
     output:
     tuple val(ID), path(reads), val(genome_size), path("${ID}_sketch/*.sylsp"), val(MODE), emit: sylph_sketch
+    tuple val('sylph'), eval('sylph -V | sed "s/sylph //g"'), topic: versions
 
     script:
     def n = reads.size()
@@ -29,6 +30,14 @@ process SYLPH_SKETCH {
         sylph sketch -t ${task.cpus} -d ${ID}_sketch ${long_fastq}
         """
     }
+
+    stub:
+    def n = reads.size()
+    MODE = (n == 2) ? "short" : "long"
+    """
+    mkdir ${ID}_sketch
+    touch ${ID}_sketch/${ID}.sylsp
+    """
 }
 
 process SYLPH_PROFILE {
@@ -47,9 +56,35 @@ process SYLPH_PROFILE {
     output:
     tuple val(ID), path(reads), val(genome_size), emit: reads_out
     tuple val(ID), path("${ID}_${MODE}_profile.tsv"), emit: sylph_tsv
+    tuple val('sylph'), eval('sylph -V | sed "s/sylph //g"'), topic: versions
 
     script:
     """
     sylph profile -t ${task.cpus} ${sylph_db} ${sylph_sketch} > ${ID}_${MODE}_profile.tsv
+    """
+
+    stub:
+    """
+    touch ${ID}_${MODE}_profile.tsv
+    """
+}
+
+process SYLPH_DB_DOWNLOAD {
+    // https://sylph-docs.github.io/pre%E2%80%90built-databases/
+    tag "gtdb-r232-c200-dbv2"
+    
+    storeDir "${params.outdir}/databases"
+
+    output:
+    path("gtdb-r232-c200-dbv2.syl2db"), emit: sylph_db
+
+    script:
+    """
+    wget http://faust.compbio.cs.cmu.edu/sylph-stuff/gtdb-r232-c200-dbv2.syl2db
+    """
+
+    stub:
+    """
+    touch gtdb-r232-c200-dbv2.syl2db
     """
 }

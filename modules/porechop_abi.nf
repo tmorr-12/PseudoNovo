@@ -8,11 +8,17 @@ process PORECHOP_ABI {
     tuple val(ID), path(reads), val(size)
 
     output:
-    tuple val(ID), path("*_trimmed.fastq", arity: '1'), val(size), emit: trimmed_fastq
+    tuple val(ID), path("${ID}_trimmed.fastq", arity: '1'), val(size), emit: trimmed_fastq
+    tuple val('porechop_abi'), eval("porechop_abi --version"), topic: versions
     
     script:
     def long_fastq="${reads[0]}"
     """
     porechop_abi --ab_initio -i ${long_fastq} -o ${ID}_trimmed.fastq --threads ${task.cpus}
+    """
+
+    stub:
+    """
+    touch ${ID}_trimmed.fastq
     """
 }

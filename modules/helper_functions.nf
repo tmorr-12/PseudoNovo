@@ -13,11 +13,16 @@ Main:
     --skip_preprocessing                Skip preprocessing step (default: false)
     --help                              Show this help message and exit
 
+Assembly:
+    --short_assembler                   Options: unicycler, shovill (default: unicycler)
+    --long_assembler                    Options: autocycler, flye (default: autocycler)
+
 Databases:
     --sylph_db                          Path to sylph database (e.g. /path/to/.sylphdb)
     --checkm2_db                        Path to checkm2 database (e.g. /path/to/.dmnd)
     --bakta_db                          Path to bakta database (e.g. /path/to/database)
     --card_db                           Path to card database (e.g. /path/to/card)
+    --poppunk_db                        Path to poppunk database (e.g. /path/to/pa_v1_refs)
     --gtdb                              Path to genome taxonomy database (e.g. /path/to/release232)
     --genomad_db                        Path to genomad database (e.g. /path/to/genomad_db)
     --checkv_db                         Path to checkv database (e.g. /path/to/checkv-db-v1.5)
@@ -56,7 +61,7 @@ def validateParams() {
     }
 
     if (!file(params.input).exists()) {
-        error "Error: Input manifest file '${params.input}' does not exist."
+        error "Input manifest file '${params.input}' does not exist."
     }
 
     if (params.mode && !(params.mode in ['short', 'long', 'hybrid'])) {
@@ -64,7 +69,15 @@ def validateParams() {
     }
 
     if (!(params.long_read_platform in ["ont", "pacbio"])) {
-        error "Error: Invalid long read platform, please choose: ont or pacbio"
+        error "Invalid long read platform, please choose: ont or pacbio"
+    }
+
+    if (!(params.short_assembler in ["unicycler", "shovill"])) {
+        error "Invalid short read assembler, please chose: unicycler or shovill"
+    }
+
+    if (!(params.long_assembler in ["autocycler", "flye"])) {
+        error "Invalid long read assembler, please chose: autocycler or flye"
     }
 }
 

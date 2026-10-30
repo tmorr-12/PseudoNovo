@@ -14,6 +14,7 @@ workflow LONG_READ_PREPROCESSING {
 
     take:
     input_ch
+    sylph_db_ch
 
     main:
     NANOPLOT_PRE(input_ch, "pre")
@@ -26,7 +27,7 @@ workflow LONG_READ_PREPROCESSING {
     }
     
     CHOPPER(filter_ch)
-    | DECONTAMINATION
+    DECONTAMINATION(CHOPPER.out.chopper_out, sylph_db_ch)
 
     if (params.downsample_reads) {
         RASUSA(DECONTAMINATION.out.reads_out_ch)

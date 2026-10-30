@@ -1,6 +1,6 @@
 # PseudoNovo
 
-**PseudoNovo** is a specialised ***Pseudo***monas de-***Novo*** assembly pipeline written in Nextflow. It can handle short, long or hybrid read datasets and performs read QC, assembly, assembly QC and annotation.
+**PseudoNovo** is a specialised ***Pseudo***monas de-***Novo*** assembly pipeline written in Nextflow. It can handle short, long or hybrid read datasets and performs read QC, assembly, assembly QC and biologically relevant functional annotations.
 
 ![Alt text](assets/metro_map.png)
 
@@ -8,11 +8,26 @@
 
 1. First ensure you have [Nextflow](https://docs.seqera.io/nextflow/install#installation) installed
 2. Next ensure you have either [Docker](https://docs.docker.com/engine/install/) or [Singularity](https://docs.sylabs.io/guides/3.0/user-guide/) installed
-3. Finally clone the repo with ``git clone https://github.com/tmorr-12/PseudoNovo``
+3. Clone the repo with ``git clone https://github.com/tmorr-12/PseudoNovo``
+4. Setup the required databases (see below)
 
-> **NOTE:** If your cluster already has the required databases, you can skip step 4 and simply provide the paths to the existing databases
+## Databases
 
-> **COMING SOON:** You are encouraged to provide paths to your own databases. However, if no databases are provided, the pipeline will automatically download them.
+**PseudoNovo** makes use of several databases. You can tell the pipeline which database to use either via the command line or by editing the `qc.config` file. If you do not provide a path to a specific database, the pipeline will automatically download it for you. Any downloaded databases are saved to the `results/databases` directory. Downloads take several hours, so the keep them somewhere safe so they can be reused.
+
+> **NOTE:** Most HPC's have a central database store. You are encouraged to use the paths issued by your local supplier.
+
+| Tool | Database | Info | Link |
+| --- | --- | --- | --- |
+| Sylph | gtdb-r232-c200-dbv2.syl2db | https://sylph-docs.github.io/pre%E2%80%90built-databases/ | http://faust.compbio.cs.cmu.edu/sylph-stuff/gtdb-r232-c200-dbv2.syl2db |
+| CheckM2 | uniref100.KO.1.dmnd | https://github.com/chklovski/CheckM2#database | https://zenodo.org/records/14897628/files/checkm2_database.tar.gz?download=1 |
+| PopPUNK | pa_v1_refs (v1)| https://bacpop.org/poppunk-databases/ | https://ftp.ebi.ac.uk/pub/databases/pp_dbs/Pseudomonas_aeruginosa_v1_refs.tar.bz2 |
+| GTDB-Tk | latest (r232) | https://gtdb.ecogenomic.org/ | https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_package/full_package/gtdbtk_data.tar.gz |
+| Bakta | db (6.0) | https://zenodo.org/records/14916843 | https://zenodo.org/records/14916843/files/db.tar.xz?download=1 |
+| RGI | latest (card 4.0.2) | https://card.mcmaster.ca/ | https://card.mcmaster.ca/download/0/broadstreet-v4.0.2.tar.bz2 |
+| geNomad | genomad_db (v1.9) | https://zenodo.org/records/14886553 | https://zenodo.org/records/14886553/files/genomad_db_v1.9.tar.gz?download=1 | 
+| CheckV | checkv-db-v1.5 | https://bitbucket.org/berkeleylab/CheckV/src/master/#markdown-header-checkv-database | https://portal.nersc.gov/CheckV/ |
+
 
 ## Usage
 Parameters can be passed via the command line or preferably by editing the 'qc.config' file located in this repo.
@@ -22,7 +37,7 @@ nextflow run main.nf --input <path/to/manifest.csv> [options]
 ```
 
 ## Generating a manifest
-To generate a manifest see [Manifest-Generator](https://github.com/tmorr-12/Manifest-Generator)
+To generate a short, long or hybrid reads manifest, see [Manifest-Generator](https://github.com/tmorr-12/Manifest-Generator). 
 
 ## Workflow
 
@@ -37,8 +52,8 @@ There are 3 main workflows: **Preprocessing**, **Assembly** and **Annotation**:
 
 **Assembly:**
 
-1. Short reads are assembled using [Unicycler](https://github.com/rrwick/unicycler), long reads are assembled using [Autocycler](https://github.com/rrwick/Autocycler) and polished using [Medaka](https://github.com/nanoporetech/medaka). Hybrid reads are also assembled using [Autocycler](https://github.com/rrwick/Autocycler), before polishing with [Polypolish](https://github.com/rrwick/Polypolish) and [Pypolca](https://github.com/gbouras13/pypolca)
-2. Assembly QC is performed using [Quast](https://github.com/ablab/quast), [CheckM2](https://github.com/chklovski/CheckM2) and [GTDB-Tk](https://github.com/ecogenomics/gtdbtk). Assemblies are sequenced typed with [MLST](https://github.com/tseemann/mlst).
+1. Short reads are assembled using [Unicycler](https://github.com/rrwick/unicycler) (or [Shovill](https://github.com/tseemann/shovill)), long reads are assembled using [Autocycler](https://github.com/rrwick/Autocycler) (or [Flye](https://github.com/mikolmogorov/Flye)) and polished using [Medaka](https://github.com/nanoporetech/medaka). Hybrid reads are also assembled using [Autocycler](https://github.com/rrwick/Autocycler), before polishing with [Polypolish](https://github.com/rrwick/Polypolish) and [Pypolca](https://github.com/gbouras13/pypolca)
+2. Assembly QC is performed using [Quast](https://github.com/ablab/quast), [CheckM2](https://github.com/chklovski/CheckM2) and [GTDB-Tk](https://github.com/ecogenomics/gtdbtk). Assemblies are sequenced typed with [MLST](https://github.com/tseemann/mlst) and assigned to clusters with [PopPUNK](https://github.com/bacpop/PopPUNK).
 3. An assembly summary report is compiled and saved to the results directory.
 
 
@@ -47,9 +62,53 @@ There are 3 main workflows: **Preprocessing**, **Assembly** and **Annotation**:
 1. Reads are annotated using [Bakta](https://github.com/oschwengers/bakta).
 2. Plasmids are screened with [Abricate](https://github.com/tseemann/abricate) and the PlasmidFinder database.
 3. AMR resistance genes are screened using [RGI](https://github.com/arpcard/rgi) and the CARD database.
-4. Prophages are identified with [geNomad](https://github.com/apcamargo/genomad) and quality of identified viral elements are assessed with [CheckV](https://bitbucket.org/berkeleylab/CheckV/src/master/).
+4. Prophages are identified with [geNomad](https://github.com/apcamargo/genomad) and the quality of identified viral elements are assessed with [CheckV](https://bitbucket.org/berkeleylab/CheckV/src/master/).
 5. Anti-phage defense systems are screened using [DefenseFinder](https://github.com/mdmparis/defense-finder).
-6. Biosynthetic gene clusters are identified with [GECCO](https://github.com/zellerlab/GECCO).
+
+## Output
+
+By default, a results directory is created wherever you launch the pipeline. 
+
+**00-INTERMEDIATES** holds any relevant out files produced during pipeline execution
+
+**01-ASSEMBLIES** holds all assembly files that pass QC
+
+**02-ANNOTATIONS** holds the output from all annotation processes (only assemblies passing QC are annotated)
+
+**databases** holds any downloaded databases (i.e. databases for which no path was given)
+
+**pipeline-info** holds the execution trace, pipeline DAG and versions.tsv file
+
+**[mode]_read_qc_report.tsv**, **assembly_report.tsv** and **multiqc_report.html** provide comprehensive summaries of all relevant pipeline outputs
+
+Example:
+
+```
+/results
+├── 00-INTERMEDIATES
+│   ├── tool_1
+│   ├── tool_2
+│   └── ...
+├── 01-ASSEMBLIES
+│   ├── test_1_contigs.fasta
+│   ├── test_2_contigs.fasta
+│   └── ...
+├── 02-ANNOTATIONS
+│   ├── abricate
+│   ├── bakta
+│   └── ...
+├── databases
+│   ├── checkv-db-v1.5
+│   ├── release232
+│   └── ...
+├── pipeline-info
+│   ├── execution_trace_20261028_114000.txt
+│   ├── pipeline_dag.mmd
+│   └── software_versions.tsv
+├── assembly_report.tsv
+├── short_read_qc_report.tsv 
+└── multiqc_report.html
+```
 
 ## Quality Control
 
@@ -64,9 +123,9 @@ In the above example, SampleA passed all FASTQ QC filters, whereas SampleB faile
 
 The assembly qc report is as such:
 
-| ID | classification | N50 | Total length | # contigs | # contigs (>= 1000 bp) | Completeness | Contamination | GC_Content | Total_Coding_Sequences | Max_Contig_Length | SCHEME | ST | ALLELES | QC Status | QC Failed Fields |
+| ID | classification | N50 | Total length | # contigs | # contigs (>= 1000 bp) | Completeness | Contamination | GC_Content | Total_Coding_Sequences | Max_Contig_Length | Cluster | ST | ALLELES | QC Status | QC Failed Fields |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Sample ID | GTDBTk classification | Quast N50 | total assembly length | no. contigs | no. contigs about 1000bp | CheckM2 completeness | CheckM2 contamination | genome GC content | total CDS | size of largest contig | MLST scheme name | sequence type | MLST alleles | PASS / FAIL | comma separated list of failed fields (if QC Status == "FAIL") |
+| Sample ID | GTDBTk classification | Quast N50 | total assembly length | no. contigs | no. contigs about 1000bp | CheckM2 completeness | CheckM2 contamination | genome GC content | total CDS | size of largest contig | PopPUNK cluster | sequence type | MLST alleles | PASS / FAIL | comma separated list of failed fields (if QC Status == "FAIL") |
 
 
 ### Short Read QC
@@ -76,7 +135,7 @@ The assembly qc report is as such:
 | fastqc_pass_criteria  | FASTQC pass criteria | "assets/fastqc_pass_criteria.json" |
 | lower_assembly_length | Lower bound for assembly length when assessing read depth with fastp | 5500000 |
 | min_contig_length     | Minimum contig length for assembly | 500 |
-| unicycler_mode        | Unicycler mode for short reads | "conservative" |
+| unicycler_mode        | Unicycler mode for short reads | "normal" |
 
 ### Long Read QC 
 
@@ -116,11 +175,16 @@ Main:
     --skip_preprocessing                Skip preprocessing step (default: false)
     --help                              Show this help message and exit
 
+Assembly:
+    --short_assembler                   Options: unicycler, shovill (default: unicycler)
+    --long_assembler                    Options: autocycler, flye (default: autocycler)
+
 Databases:
     --sylph_db                          Path to sylph database (e.g. /path/to/.sylphdb)
     --checkm2_db                        Path to checkm2 database (e.g. /path/to/.dmnd)
     --bakta_db                          Path to bakta database (e.g. /path/to/database)
     --card_db                           Path to card database (e.g. /path/to/card)
+    --poppunk_db                        Path to poppunk database (e.g. /path/to/pa_v1_refs)
     --gtdb                              Path to genome taxonomy database (e.g. /path/to/release232)
     --genomad_db                        Path to genomad database (e.g. /path/to/genomad_db)
     --checkv_db                         Path to checkv database (e.g. /path/to/checkv-db-v1.5)
