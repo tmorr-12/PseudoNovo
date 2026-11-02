@@ -12,13 +12,14 @@ process GAPSEQ {
     path(gapseq_db)
 
     output:
-    tuple val(ID), path("${ID}_contigs-all-Pathways.tbl"), emit: gapseq_out
+    tuple val(ID), path("*-all-Pathways.tbl"), emit: gapseq_out
     tuple val('gapseq'), eval('gapseq -v 2>&1 | grep -oP "\\d+\\.\\d+\\.\\d+"'), topic: versions
 
     script:
     """
     gapseq \\
-        doall \\
+        find \\
+        -p all \\
         -t Bacteria \\
         -K ${task.cpus} \\
         -D ${gapseq_db} \\
