@@ -12,14 +12,14 @@ process GAPSEQ {
     path(gapseq_db)
 
     output:
-    tuple val(ID), path("*-all-Pathways.tbl"), emit: gapseq_out
+    tuple val(ID), path("*-all-Pathways.tbl"), emit: gapseq_pathways
+    tuple val(ID), path("*.RDS"), emit: gapseq_model
     tuple val('gapseq'), eval('gapseq -v 2>&1 | grep -oP "\\d+\\.\\d+\\.\\d+"'), topic: versions
 
     script:
     """
     gapseq \\
-        find \\
-        -p all \\
+        doall \\
         -t Bacteria \\
         -K ${task.cpus} \\
         -D ${gapseq_db} \\
@@ -29,6 +29,7 @@ process GAPSEQ {
     stub:
     """
     touch ${ID}_contigs-all-Pathways.tbl
+    touch ${ID}_contigs.RDS
     """
 }
 
