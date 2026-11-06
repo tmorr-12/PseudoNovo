@@ -21,7 +21,7 @@ autocycler subsample \
 
 # Step 2: assemble each subsampled file
 mkdir -p assemblies
-for assembler in flye metamdbg miniasm necat nextdenovo raven; do
+for assembler in flye miniasm necat nextdenovo raven; do
     for i in `eval echo {01..$N_SUBSETS}`; do
         micromamba activate ${assembler}
         autocycler helper \
@@ -38,7 +38,7 @@ done
 rm subsampled_reads/*.fastq
 
 # Step 3: compress the input assemblies into a unitig graph
-autocycler compress -i assemblies -a autocycler_out
+autocycler compress -i assemblies -a autocycler_out -t 4
 
 # Step 4: cluster the input contigs into putative genomic sequences
 autocycler cluster -a autocycler_out
