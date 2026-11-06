@@ -16,8 +16,9 @@ process POPPUNK {
     tuple val('poppunk'), eval("poppunk --version | cut -d ' ' -f 2"), topic: versions
 
     script:
+    def file = contigs.getBaseName()
     """
-    echo "${ID}_contigs\t${contigs}" > query.txt
+    echo "${file}\t${contigs}" > query.txt
 
     poppunk_assign \\
         --db ${poppunk_db} \\
