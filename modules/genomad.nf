@@ -26,8 +26,8 @@ process GENOMAD {
         genomad_out \\
         ${genomad_db}
 
-    mv genomad_out/${ID}_contigs_summary/${ID}_contigs_virus.fna ${ID}_virus.fna
-    mv genomad_out/${ID}_contigs_summary/${ID}_contigs_virus_genes.tsv ${ID}_virus_genes.tsv
+    mv genomad_out/${ID}*_summary/${ID}*_virus.fna ${ID}_virus.fna
+    mv genomad_out/${ID}*_summary/${ID}*_virus_genes.tsv ${ID}_virus_genes.tsv
     """
 
     stub:

@@ -3,7 +3,7 @@ process BAKTA {
     tag "${ID}"
     label 'huge'
 
-    container "quay.io/biocontainers/bakta:1.12.1--pyhdfd78af_0"
+    container "quay.io/staphb/bakta:1.12.2"
 
     publishDir "${params.outdir}/02-ANNOTATIONS/bakta"
 
