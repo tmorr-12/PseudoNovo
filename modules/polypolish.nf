@@ -51,7 +51,6 @@ process POLYPOLISH {
         --out2 filtered_2.sam
 
     polypolish polish ${fasta} filtered_1.sam filtered_2.sam > ${ID}_polished.fasta
-    rm *.amb *.ann *.bwt *.pac *.sa *.sam
     """
 
     stub:

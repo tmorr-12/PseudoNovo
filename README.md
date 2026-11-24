@@ -27,6 +27,7 @@
 | RGI | latest (card 4.0.2) | https://card.mcmaster.ca/ | https://card.mcmaster.ca/download/0/broadstreet-v4.0.2.tar.bz2 |
 | geNomad | genomad_db (v1.9) | https://zenodo.org/records/14886553 | https://zenodo.org/records/14886553/files/genomad_db_v1.9.tar.gz?download=1 | 
 | CheckV | checkv-db-v1.5 | https://bitbucket.org/berkeleylab/CheckV/src/master/#markdown-header-checkv-database | https://portal.nersc.gov/CheckV/ |
+| GapSeq | seq | https://gapseq.readthedocs.io/en/latest/database/ReferenceSequences.html | https://zenodo.org/records/20446806 |
 
 
 ## Usage
@@ -64,6 +65,7 @@ There are 3 main workflows: **Preprocessing**, **Assembly** and **Annotation**:
 3. AMR resistance genes are screened using [RGI](https://github.com/arpcard/rgi) and the CARD database.
 4. Prophages are identified with [geNomad](https://github.com/apcamargo/genomad) and the quality of identified viral elements are assessed with [CheckV](https://bitbucket.org/berkeleylab/CheckV/src/master/).
 5. Anti-phage defense systems are screened using [DefenseFinder](https://github.com/mdmparis/defense-finder).
+6. Metabolic network reconstruction is performed using [GapSeq](https://github.com/jotech/gapseq).
 
 ## Output
 
@@ -189,6 +191,7 @@ Databases:
     --genomad_db                        Path to genomad database (e.g. /path/to/genomad_db)
     --checkv_db                         Path to checkv database (e.g. /path/to/checkv-db-v1.5)
     --defensefinder_models              Path to defense finder models (e.g. /path/to/.macsyfinder/models)
+    --gapseq_db                         Path to gapseq database (e.g. /path/to/seq)
 
 QC Options:
     --min_depth                         Minimum read coverage (default: 30)

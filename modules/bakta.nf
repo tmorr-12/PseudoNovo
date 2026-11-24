@@ -3,7 +3,7 @@ process BAKTA {
     tag "${ID}"
     label 'huge'
 
-    container "quay.io/biocontainers/bakta:1.12.1--pyhdfd78af_0"
+    container "quay.io/staphb/bakta:1.12.2"
 
     publishDir "${params.outdir}/02-ANNOTATIONS/bakta"
 
@@ -17,17 +17,12 @@ process BAKTA {
     path "${ID}.txt", topic: multi_qc
 
     script:
-    def locus_tag = params.locus_tag ? "--locus-tag ${params.locus_tag}" : ""
     """
     bakta \\
         ${contigs} \\
         --db ${bakta_db} \\
         --prefix ${ID} \\
-        --threads ${task.cpus} \\
-        --genus Pseudomonas \\
-        --species aeruginosa \\
-        ${locus_tag} \\
-        --compliant
+        --threads ${task.cpus}
     """
 
     stub:

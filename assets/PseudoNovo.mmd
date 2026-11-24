@@ -63,6 +63,7 @@ graph LR
         rgi([RGI])
         genomad([geNomad])
         defensefinder([DefenseFinder])
+        gapseq([GapSeq])
     end
 
 	sylph_sh -->|short| unicycler
@@ -116,3 +117,9 @@ graph LR
     mlst -->|short,hybrid,long| defensefinder
     poppunk -->|short,hybrid,long| defensefinder
     gtdbtk -->|short,hybrid,long| defensefinder
+    
+    quast -->|short,hybrid,long| gapseq
+    checkm2 -->|short,hybrid,long| gapseq
+    mlst -->|short,hybrid,long| gapseq
+    poppunk -->|short,hybrid,long| gapseq
+    gtdbtk -->|short,hybrid,long| gapseq

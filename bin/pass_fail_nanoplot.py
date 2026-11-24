@@ -3,10 +3,9 @@
 import sys
 
 if __name__ == "__main__":
-    ID = sys.argv[1]
-    nanoplot_out = sys.argv[2]
-    min_depth = int(sys.argv[3])
-    lower_assembly_length = int(sys.argv[4])
+    nanoplot_out = sys.argv[1]
+    min_depth = int(sys.argv[2])
+    lower_assembly_length = int(sys.argv[3])
 
     with open(nanoplot_out) as f:
         for line in f.read().split('\n'):

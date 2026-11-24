@@ -21,6 +21,7 @@ process DEFENSE_FINDER {
 
     defense-finder run \\
         --models-dir ${models} \\
+        --skip-model-version-check \\
         -w ${task.cpus} \\
         ${contigs}
     """

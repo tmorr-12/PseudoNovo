@@ -35,6 +35,7 @@ workflow {
     genomad_db_ch = FETCH_DATABASES.out.genomad_db_ch
     checkv_db_ch = FETCH_DATABASES.out.checkv_db_ch
     defensefinder_models_ch = FETCH_DATABASES.out.defensefinder_models_ch
+    gapseq_db_ch = FETCH_DATABASES.out.gapseq_db_ch
 
     def assembly_ch
     if (!params.skip_preprocessing) {
@@ -60,7 +61,8 @@ workflow {
         card_db_ch,
         genomad_db_ch,
         checkv_db_ch,
-        defensefinder_models_ch
+        defensefinder_models_ch,
+        gapseq_db_ch
     )
 
     multi_qc_ch = channel.topic('multi_qc').collect()

@@ -2,7 +2,6 @@
 
 include { UNICYCLER_SHORT } from '../modules/unicycler.nf'
 include { SHOVILL } from '../modules/shovill.nf'
-include { AUTOCYCLER } from '../modules/autocycler.nf'
 include { FLYE } from '../modules/flye.nf'
 include { MEDAKA } from '../modules/medaka.nf'
 include { BWA_POLYPOLISH
@@ -16,6 +15,8 @@ include { GTDBTK } from '../modules/gtdbtk.nf'
 include { COLLECT_ASSEMBLY_REPORTS 
           MERGE_REPORTS } from '../modules/reporting.nf'
 include { PUBLISH_ASSEMBLY } from '../modules/publish_assembly.nf'
+
+include { AUTOCYCLER } from '../subworkflows/autocycler_subworkflow.nf'
 
 workflow ASSEMBLY {
 

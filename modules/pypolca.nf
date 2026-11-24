@@ -11,15 +11,13 @@ process PYPOLCA {
     tuple val(ID), path(reads), path(fasta)
 
     output:
-    tuple val(ID), path("${ID}_hybrid.fasta"), emit: hybrid_ch
+    tuple val(ID), path("${ID}_hybrid.fa"), emit: hybrid_ch
     tuple val('pypolca'), eval("pypolca --version | sed 's/^pypolca, version //'"), topic: versions
 
     script:
     def R1="${reads[0]}"
     def R2="${reads[1]}"
     """
-    mkdir -p pypolca_out
-
     pypolca run \\
         -a ${fasta} \\
         -1 ${R1} \\
@@ -29,11 +27,11 @@ process PYPOLCA {
         -o pypolca_out \\
         --careful
 
-    mv pypolca_out/${ID}_corrected.fasta ${ID}_hybrid.fasta
+    mv pypolca_out/${ID}_corrected.fasta ${ID}_hybrid.fa
     """
 
     stub:
     """
-    touch ${ID}_hybrid.fasta
+    touch ${ID}_hybrid.fa
     """
 }
