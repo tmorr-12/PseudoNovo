@@ -2,8 +2,14 @@
 
 include { SYLPH_SKETCH 
           SYLPH_PROFILE } from '../modules/sylph.nf'
+
 include { COLLECT_FASTQ_REPORTS 
           MERGE_REPORTS } from '../modules/reporting.nf'
+          
+include { AUTOCYCLER_SUBSAMPLE
+          AUTOCYCLER_ASSEMBLE
+          AUTOCYCLER_COMPRESS
+          AUTOCYCLER_CLUSTER_AND_COMBINE } from '../modules/autocycler.nf'
 
 workflow DECONTAMINATION {
 
@@ -43,4 +49,21 @@ workflow CREATE_FASTQ_REPORT {
 
     emit: out_ch
     
+}
+
+workflow AUTOCYCLER {
+
+    take:
+    assembly_ch
+
+    main:
+    AUTOCYCLER_SUBSAMPLE(assembly_ch)
+    | AUTOCYCLER_ASSEMBLE
+    | AUTOCYCLER_COMPRESS
+    | AUTOCYCLER_CLUSTER_AND_COMBINE
+
+    fasta_ch = AUTOCYCLER_CLUSTER_AND_COMBINE.out.fasta_ch
+
+    emit:
+    fasta_ch
 }

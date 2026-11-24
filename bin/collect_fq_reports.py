@@ -10,7 +10,7 @@ def parse_args():
     parser.add_argument("--mode", type=str, required=True, choices=["short", "long"], help="short or long reads")
     parser.add_argument("--fastqc_r1", choices=["PASS", "FAIL", "na"], help="sample fastqc PASS/FAIL")
     parser.add_argument("--fastqc_r2", choices=["PASS", "FAIL", "na"], help="sample fastqc PASS/FAIL")
-    parser.add_argument("--fastp", choices=["PASS", "FAIL", "na"], help="sample fastp PASS/FAIL")
+    parser.add_argument("--depth", choices=["PASS", "FAIL", "na"], help="sample depth PASS/FAIL")
     parser.add_argument("--sylph", choices=["PASS", "FAIL", "na"], help="sample sylph PASS/FAIL")
     parser.add_argument("--nanoplot", choices=["PASS", "FAIL", "na"], help="sample nanoplot PASS/FAIL")
     return parser.parse_args()
@@ -24,8 +24,8 @@ def main():
         rows["fastqc_r1"] = args.fastqc_r1
     if args.fastqc_r2 and args.fastqc_r2 != "na":
         rows["fastqc_r2"] = args.fastqc_r2
-    if args.fastp and args.fastp != "na":
-        rows["fastp"] = args.fastp
+    if args.depth and args.fastp != "na":
+        rows["depth"] = args.depth
     if args.sylph and args.sylph != "na":
         rows["sylph"] = args.sylph
     if args.nanoplot and args.nanoplot != "na":

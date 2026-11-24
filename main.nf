@@ -5,7 +5,7 @@ include { printHelp
           setInputChannel 
           validateManifest } from './modules/helper_functions.nf'
 
-include { PREPROCESSING } from './workflows/preprocessing.nf'
+include { READ_QC } from './workflows/read_qc.nf'
 include { ASSEMBLY } from './workflows/assembly.nf'
 include { ANNOTATION } from './workflows/annotation.nf'
 include { FETCH_DATABASES } from './workflows/fetch_databases.nf'
@@ -39,11 +39,11 @@ workflow {
 
     def assembly_ch
     if (!params.skip_preprocessing) {
-        PREPROCESSING(
+        READ_QC(
             input_ch, 
             sylph_db_ch
         )
-        assembly_ch = PREPROCESSING.out.preprocessed_ch
+        assembly_ch = READ_QC.out.preprocessed_ch
     } else {
         assembly_ch = input_ch
     }

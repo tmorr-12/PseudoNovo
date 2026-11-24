@@ -16,7 +16,7 @@ include { COLLECT_ASSEMBLY_REPORTS
           MERGE_REPORTS } from '../modules/reporting.nf'
 include { PUBLISH_ASSEMBLY } from '../modules/publish_assembly.nf'
 
-include { AUTOCYCLER } from '../subworkflows/autocycler_subworkflow.nf'
+include { AUTOCYCLER } from '../subworkflows/subworkflows.nf'
 
 workflow ASSEMBLY {
 

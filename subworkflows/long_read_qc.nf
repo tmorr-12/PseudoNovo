@@ -8,9 +8,9 @@ include { CHOPPER } from '../modules/chopper.nf'
 include { RASUSA } from '../modules/rasusa.nf'
 
 include { DECONTAMINATION 
-          CREATE_FASTQ_REPORT } from '../subworkflows/generic_preprocessing.nf'
+          CREATE_FASTQ_REPORT } from '../subworkflows/subworkflows.nf'
 
-workflow LONG_READ_PREPROCESSING {
+workflow LONG_READ_QC {
 
     take:
     input_ch
