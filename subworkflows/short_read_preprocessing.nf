@@ -2,6 +2,7 @@
 
 include { FASTQC } from '../modules/fastqc.nf'
 include { FASTP } from '../modules/fastp.nf'
+include { SEQTK } from '../modules/seqtk.nf'
 include { COLLECT_FASTQ_REPORTS 
           MERGE_REPORTS } from '../modules/reporting.nf'
           
@@ -21,10 +22,16 @@ workflow SHORT_READ_PREPROCESSING {
     fastp_json_ch = FASTP.out.json
 
     FASTQC(filter_ch)
-    
     DECONTAMINATION(filter_ch, sylph_db_ch)
+
+    if (params.downsample_reads) {
+        SEQTK(DECONTAMINATION.out.reads_out_ch)
+        filtered_reads_ch = SEQTK.out.seqtk_out_ch
+    } else {
+        filtered_reads_ch = DECONTAMINATION.out.reads_out_ch
+    }
     
-    report_in_ch = DECONTAMINATION.out.reads_out_ch
+    report_in_ch = filtered_reads_ch
         .join(FASTQC.out.r1_summary)
         .join(FASTQC.out.r2_summary)
         .join(fastp_json_ch)

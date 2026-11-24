@@ -17,17 +17,12 @@ process BAKTA {
     path "${ID}.txt", topic: multi_qc
 
     script:
-    def locus_tag = params.locus_tag ? "--locus-tag ${params.locus_tag}" : ""
     """
     bakta \\
         ${contigs} \\
         --db ${bakta_db} \\
         --prefix ${ID} \\
-        --threads ${task.cpus} \\
-        --genus Pseudomonas \\
-        --species aeruginosa \\
-        ${locus_tag} \\
-        --compliant
+        --threads ${task.cpus}
     """
 
     stub:

@@ -31,11 +31,11 @@ workflow ANNOTATION {
         }
         .set { split_ch }
 
-    BAKTA(split_ch.bakta, bakta_db_ch)
+    // BAKTA(split_ch.bakta, bakta_db_ch)
     ABRICATE(split_ch.abricate)
     RGI(split_ch.rgi, card_db_ch)
     DEFENSE_FINDER(split_ch.defensefinder, defensefinder_models_ch)
-    GAPSEQ(split_ch.gapseq, gapseq_db_ch)
+    // GAPSEQ(split_ch.gapseq, gapseq_db_ch)
 
     GENOMAD(split_ch.genomad, genomad_db_ch)
     CHECKV(GENOMAD.out.genomad_fna_ch, checkv_db_ch)

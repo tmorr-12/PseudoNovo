@@ -15,4 +15,5 @@ if __name__ == "__main__":
         dfs.append(df)
 
     merged = pd.concat(dfs, ignore_index=True)
+    merged = merged.sort_values(by="ID", ignore_index=True)
     merged.to_csv(f"{args.name}.tsv", sep="\t", index=False)

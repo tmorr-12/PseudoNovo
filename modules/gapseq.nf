@@ -1,7 +1,7 @@
 process GAPSEQ {
     // https://github.com/jotech/gapseq
     tag "${ID}"
-    label "large"
+    label "huge"
 
     container "quay.io/biocontainers/gapseq:2.1.0--hdfd78af_0"
 

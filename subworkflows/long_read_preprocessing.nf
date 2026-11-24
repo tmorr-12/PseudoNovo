@@ -31,7 +31,7 @@ workflow LONG_READ_PREPROCESSING {
 
     if (params.downsample_reads) {
         RASUSA(DECONTAMINATION.out.reads_out_ch)
-        | set { filtered_reads_ch }
+        filtered_reads_ch = RASUSA.out.downsampled_reads
     } else {
         filtered_reads_ch = DECONTAMINATION.out.reads_out_ch
     }
