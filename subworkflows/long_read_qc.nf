@@ -47,7 +47,7 @@ workflow LONG_READ_QC {
         .join(DECONTAMINATION.out.sylph_tsv)
         .join(NANOPLOT_POST.out.nanostats)
         .map { ID, reads, size, tsv, stats ->
-            tuple(ID, reads, size, [], [], [], tsv, stats)
+            tuple(ID, reads, size, [], [], tsv, stats)
         }
 
     CREATE_FASTQ_REPORT(report_in_ch, "long_read_qc_report")

@@ -11,8 +11,6 @@
 - phastest instead of checkv??
 - vfdb (w/ abricate) on genomad identified viral regions
 
-- replace fastp with cutadapt
-- add another means of assessing read depth 
 - for each annotation tool, all samples must be annotated in a single process for more robust pipeline execution
 - summary figures for tools
 - shorten classification string in report

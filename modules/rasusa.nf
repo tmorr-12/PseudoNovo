@@ -16,11 +16,11 @@ process RASUSA {
     def size = params.target_genome_size ?: genome_size
     def long_fastq = reads[0]
     """
-    rasusa \
-        reads \
-        --coverage ${params.target_coverage} \
-        --genome-size ${size} \
-        ${long_fastq} \
+    rasusa \\
+        reads \\
+        --coverage ${params.target_coverage} \\
+        --genome-size ${size} \\
+        ${long_fastq} \\
     > ${ID}_rasusa.fastq
     """
 

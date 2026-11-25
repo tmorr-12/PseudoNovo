@@ -35,18 +35,16 @@ workflow ASSEMBLY {
             SHOVILL(assembly_ch)
             qc_ch = SHOVILL.out.fasta_ch
         }
-
     } else if (params.mode == "long") {
-            if (params.long_assembler == "autocycler") {
-                AUTOCYCLER(assembly_ch)
-                fasta_ch = AUTOCYCLER.out.fasta_ch
-            } else if (params.long_assembler == "flye") {
-                FLYE(assembly_ch)
-                fasta_ch = FLYE.out.fasta_ch
-            }
+        if (params.long_assembler == "autocycler") {
+            AUTOCYCLER(assembly_ch)
+            fasta_ch = AUTOCYCLER.out.fasta_ch
+        } else if (params.long_assembler == "flye") {
+            FLYE(assembly_ch)
+            fasta_ch = FLYE.out.fasta_ch
+        }
         MEDAKA(fasta_ch)
         qc_ch = MEDAKA.out.polished_ch
-
     } else if (params.mode == "hybrid") {
         AUTOCYCLER(assembly_ch)
         BWA_POLYPOLISH(AUTOCYCLER.out.fasta_ch)

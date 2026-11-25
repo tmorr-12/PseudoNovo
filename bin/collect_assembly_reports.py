@@ -38,7 +38,7 @@ def qc_row(row, args):
     """
     QC each row, find which fields pass and which fail:
         - Total assembly length: ±20% target genome size
-        - GC content: ±10% target GC content
+        - GC content: ±2% target GC content
         - CheckM2 Completeness: At least 98% completeness (default)
         - CheckM2 Contamination: No more than 2% contamination (default)
         - GTDBTk classification of 's__Pseudomonas aeruginosa'
