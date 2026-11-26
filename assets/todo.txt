@@ -13,5 +13,4 @@
 
 - for each annotation tool, all samples must be annotated in a single process for more robust pipeline execution
 - summary figures for tools
-- shorten classification string in report
 - mobsuite over plasmidfinder

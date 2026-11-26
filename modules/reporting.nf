@@ -1,6 +1,6 @@
 process COLLECT_FASTQ_REPORTS {
     tag "${ID}"
-    label 'minimal'
+    label 'tiny'
 
     container 'quay.io/biocontainers/pandas:2.2.1'
 

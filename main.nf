@@ -32,8 +32,6 @@ workflow {
     gtdb_db_ch = FETCH_DATABASES.out.gtdb_db_ch
     bakta_db_ch = FETCH_DATABASES.out.bakta_db_ch
     card_db_ch = FETCH_DATABASES.out.card_db_ch
-    genomad_db_ch = FETCH_DATABASES.out.genomad_db_ch
-    checkv_db_ch = FETCH_DATABASES.out.checkv_db_ch
     defensefinder_models_ch = FETCH_DATABASES.out.defensefinder_models_ch
     gapseq_db_ch = FETCH_DATABASES.out.gapseq_db_ch
 
@@ -59,8 +57,6 @@ workflow {
         ASSEMBLY.out.contigs_ch,
         bakta_db_ch,
         card_db_ch,
-        genomad_db_ch,
-        checkv_db_ch,
         defensefinder_models_ch,
         gapseq_db_ch
     )
